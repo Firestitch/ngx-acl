@@ -1,0 +1,13 @@
+{
+  "extends": "./tools/config/tsconfig.cli.json",
+  "compilerOptions": {
+    "paths": {
+      "@firestitch/acl": [
+        "src/public_api.ts"
+      ],
+      "@env": [
+        "playground/environments/environment.ts"
+      ]
+    }
+  }
+}
