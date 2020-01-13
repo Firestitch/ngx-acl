@@ -8,17 +8,27 @@ import { NgControl } from '@angular/forms';
 
 import { FsAclQueryService } from '../../services/acl-query.service';
 import { AclAttributedBaseDirective } from './acl-attributed-base.directive';
+import { isArray } from 'lodash-es';
+import { AclRequire } from '../../enums';
 
 
 @Directive({
-  selector: '[fsAclEnabled]',
+  selector: '[fsAclEnable]'
 })
-export class AclEnabledDirective extends AclAttributedBaseDirective implements OnDestroy {
+export class AclEnableDirective extends AclAttributedBaseDirective implements OnDestroy {
 
-  @Input('fsAclEnabled')
-  protected _requestedPermissions: string[];
+  @Input('fsAclEnable')
+  set fsAclEnabled(value) {
+    this._requestedPermissions = isArray(value) ? value : [value];
+  }
 
-  protected _hasValidAccess = false;
+  @Input('fsAclObject')
+  set fsAclEnabledObject(value) {
+    this._permissionObject = value;
+  }
+
+  @Input('fsAclRequire')
+  protected _require = AclRequire.Any;
 
   constructor(
     protected _aclQuery: FsAclQueryService,
@@ -28,15 +38,15 @@ export class AclEnabledDirective extends AclAttributedBaseDirective implements O
   }
 
   protected _checkPermissions() {
-    this._hasValidAccess = this._aclQuery.canWrite(
+    const valid = this._aclQuery.canWrite(
       this._requestedPermissions,
       this._permissionObject,
-      this._predicate
+      this._require
     );
 
     setTimeout(() => {
       if (this._ngControl && this._ngControl.control) {
-        if (this._hasValidAccess) {
+        if (valid) {
           this._ngControl.control.enable();
         } else {
           this._ngControl.control.disable();

@@ -2,6 +2,8 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { AclStructuredBaseDirective } from './acl-structured-base.directive';
 import { FsAclQueryService } from '../../services/acl-query.service';
+import { isArray } from 'lodash-es';
+import { AclRequire } from '../../enums/acl-require.enum';
 
 
 @Directive({
@@ -10,29 +12,27 @@ import { FsAclQueryService } from '../../services/acl-query.service';
 export class AclWriteDirective extends AclStructuredBaseDirective {
 
   @Input('fsAclWrite')
-  protected _requestedPermissions: string[];
+  set fsAclWrite(value) {
+    this._requestedPermissions = isArray(value) ? value : [value];
+  }
 
   @Input()
   set fsAclWriteThen(value: TemplateRef<any>) {
     this._thenTemplateRef = value;
     this._thenViewRef = null;
-
-    this._checkPermissions();
   }
 
   @Input()
   set fsAclWriteElse(value: TemplateRef<any>) {
     this._elseTemplateRef = value;
     this._elseViewRef = null;
-
-    this._checkPermissions();
   }
 
   @Input('fsAclWriteObject')
   protected _permissionObject = null;
 
-  @Input('fsAclWritePredicate')
-  protected _predicate = 'OR';
+  @Input('fsAclWriteRequire')
+  protected _require = AclRequire.Any;
 
   constructor(
     protected _tempalteRef: TemplateRef<null>,
@@ -43,12 +43,10 @@ export class AclWriteDirective extends AclStructuredBaseDirective {
   }
 
   protected _checkPermissions() {
-    this._context.$implicit = this._aclQuery.canWrite(
+    return this._aclQuery.canWrite(
       this._requestedPermissions,
       this._permissionObject,
-      this._predicate
+      this._require
     );
-
-    this._updateView();
   }
 }

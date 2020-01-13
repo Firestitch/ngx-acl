@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { AccessPermission } from '../enums/access-permission.enum';
+import { AclAccess } from '../enums/acl-access.enum';
+import { AclPermission } from '../interfaces/acl-permission';
+import { AclRequire } from '../enums/acl-require.enum';
 
 
 @Injectable()
 export class FsAclQueryService {
 
-  private _permissions = new BehaviorSubject<{ [key: string]: number }>(null);
+  private _permissions = new BehaviorSubject<AclPermission[]>([]);
 
   constructor() {}
 
-  get permissionsChange$(): Observable<{ [key: string]: number }> {
+  get permissions$(): Observable<AclPermission[]> {
     return this._permissions.asObservable();
   }
 
@@ -19,43 +21,33 @@ export class FsAclQueryService {
     return this._permissions.getValue();
   }
 
-  public setPermissions(permissions: any) {
-    const permissionsObject = {};
-
-    if (permissions['']) {
-      permissionsObject['global'] = permissions[''];
-
-      delete permissions[''];
-    }
-
-    this._permissions.next({
-      ...permissionsObject,
-      ...permissions,
-    });
+  public setPermissions(permissions: AclPermission[]) {
+    this._permissions.next(permissions);
   }
 
-  public resetPermissions() {
+  public clearPermissions() {
     this._permissions.next(null);
   }
 
-  public canRead(permissions: string[], permissionObject = null, predicate = 'OR') {
-    return this._canAccess(permissions, AccessPermission.Read, permissionObject, predicate);
+  public canRead(permissions: string[], permissionObject = null, require: AclRequire = AclRequire.Any) {
+    return this._canAccess(permissions, AclAccess.Read, permissionObject, require);
   }
 
-  public canWrite(permissions: string[], permissionObject = null, predicate = 'OR') {
-    return this._canAccess(permissions, AccessPermission.Write, permissionObject, predicate);
+  public canWrite(permissions: string[], permissionObject = null, require: AclRequire = AclRequire.Any) {
+    return this._canAccess(permissions, AclAccess.Write, permissionObject, require);
   }
 
-  public canFull(permissions: string[], permissionObject = null, predicate = 'OR') {
-    return this._canAccess(permissions, AccessPermission.Full, permissionObject, predicate);
+  public canFull(permissions: string[], permissionObject = null, require: AclRequire = AclRequire.Any) {
+    return this._canAccess(permissions, AclAccess.Full, permissionObject, require);
   }
 
-  private _canAccess(permissions: string[], access: AccessPermission, permissionObject = null, predicate = 'OR') {
-    if (!this.permissions) {
+  private _canAccess(permissions: string[], access: AclAccess, permissionObject, require: AclRequire = AclRequire.Any) {
+
+    if (!this.permissions.length) {
       return false;
     }
 
-    if (predicate === 'OR') {
+    if (require === AclRequire.Any) {
       return permissions.some((permission) => {
         return this._weightPermissions(access, permission, permissionObject);
       });
@@ -66,16 +58,27 @@ export class FsAclQueryService {
     }
   }
 
-  private _weightPermissions(targetWeight, permission, permissionObject): boolean {
-    if (!this.permissions || !this.permissions['global']) { return false; }
+  private _weightPermissions(access: AclAccess, permission, permissionObject): boolean {
 
-    if (permissionObject && this.permissions[permissionObject]) {
-      return Math.max(
-        this.permissions[permissionObject][permission] || 0,
-        this.permissions['global'][permission] || 0
-      ) >= targetWeight;
+    if (!this.permissions.length) {
+      return false;
+    }
+
+    if (permissionObject) {
+
+      const aclPermission = this.permissions.find(item => {
+        return item.object === permissionObject && (!permission || (item.permission === permission));
+      });
+
+      return aclPermission && aclPermission.access >= access;
+
     } else {
-      return this.permissions['global'][permission] >= targetWeight;
+
+      const aclPermission = this.permissions.find(item => {
+        return item.object === null && (!permission || (item.permission === permission))
+      });
+
+      return aclPermission && aclPermission.access >= access;
     }
   }
 }

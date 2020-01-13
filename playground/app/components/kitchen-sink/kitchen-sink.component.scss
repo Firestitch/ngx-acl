@@ -1,0 +1,17 @@
+.mt0 {
+  margin-top: 0;
+}
+
+.row {
+  line-height: 50px;
+}
+
+.valid:before {
+  content: '✔';
+  color: #16C60C;
+}
+
+.invalid:before {
+  content: '✖';
+  color: red;
+}

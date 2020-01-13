@@ -2,6 +2,8 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { AclStructuredBaseDirective } from './acl-structured-base.directive';
 import { FsAclQueryService } from '../../services/acl-query.service';
+import { isArray } from 'lodash-es';
+import { AclRequire } from '../../enums/acl-require.enum';
 
 
 @Directive({
@@ -10,29 +12,29 @@ import { FsAclQueryService } from '../../services/acl-query.service';
 export class AclReadDirective extends AclStructuredBaseDirective {
 
   @Input('fsAclRead')
-  protected _requestedPermissions: string[];
+  set fsAclRead(value) {
+    this._requestedPermissions = isArray(value) ? value : [value];
+  }
 
   @Input()
   set fsAclReadThen(value: TemplateRef<any>) {
     this._thenTemplateRef = value;
     this._thenViewRef = null;
-
-    this._checkPermissions();
   }
 
   @Input()
   set fsAclReadElse(value: TemplateRef<any>) {
     this._elseTemplateRef = value;
     this._elseViewRef = null;
-
-    this._checkPermissions();
   }
 
   @Input('fsAclReadObject')
   protected _permissionObject = null;
 
-  @Input('fsAclReadPredicate')
-  protected _predicate = 'OR';
+  @Input('fsAclReadRequire')
+  protected _require = AclRequire.Any;
+
+  protected _requestedPermissions: string[];
 
   constructor(
     protected _tempalteRef: TemplateRef<null>,
@@ -43,11 +45,10 @@ export class AclReadDirective extends AclStructuredBaseDirective {
   }
 
   protected _checkPermissions() {
-    this._context.$implicit = this._aclQuery.canRead(
+    return this._aclQuery.canRead(
       this._requestedPermissions,
       this._permissionObject,
-      this._predicate
+      this._require
     );
-    this._updateView();
   }
 }

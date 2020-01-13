@@ -1,1 +1,110 @@
-Hi
+<h2 class="mt0">Full Access</h2>
+
+<div class="row">
+  Full Access to global projects
+
+  <span *fsAclFull="Permission.Project; else invalidFullGlobal">
+    <span class="valid"></span>
+  </span>
+
+  <ng-template #invalidFullGlobal>
+    <span class="invalid"></span>
+  </ng-template>
+
+</div>
+
+<div class="row">
+  Full Access to project ID {{validProject.id}} with Project permission
+
+  <span *fsAclFull="Permission.Project; object validProject.id; else invalidFullProject">
+    <span class="valid"></span>
+  </span>
+  <ng-template #invalidFullProject>
+    <span class="invalid"></span>
+  </ng-template>
+
+</div>
+
+<div class="row">
+  Full Access to project ID {{validProject.id}} with Project and Project Approval Permissions
+  <span *fsAclFull="[Permission.Project,Permission.ProjectApproval]; object validProject.id; require 'all'; else invalidFullAllProject">
+    <span class="valid"></span>
+  </span>
+  <ng-template #invalidFullAllProject>
+    <span class="invalid"></span>
+  </ng-template>
+</div>
+
+<h2>Write Access</h2>
+
+<div class="row">
+  Write Access to global projects
+
+  <span *fsAclWrite="Permission.Project; else invalidWriteGlobal">
+    <span class="valid"></span>
+  </span>
+
+  <ng-template #invalidWriteGlobal>
+    <span class="invalid"></span>
+  </ng-template>
+
+</div>
+
+<div class="row">
+  Write Access to project ID {{validProject.id}} with Project permission
+
+  <span *fsAclWrite="Permission.Project; object validProject.id; else invalidWriteProject">
+    <span class="valid"></span>
+  </span>
+  <ng-template #invalidWriteProject>
+    <span class="invalid"></span>
+  </ng-template>
+
+</div>
+
+<div class="row">
+  Write Access to project ID {{validProject.id}} with Project and Project Approval Permissions
+  <span *fsAclWrite="[Permission.Project,Permission.ProjectApproval]; object validProject.id; require 'all'; else invalidWriteAllProject">
+    <span class="valid"></span>
+  </span>
+  <ng-template #invalidWriteAllProject>
+    <span class="invalid"></span>
+  </ng-template>
+</div>
+
+<h2>Read Access</h2>
+
+<div class="row">
+  Read Access to global projects
+
+  <span *fsAclRead="Permission.Project; else invalidReadGlobal">
+    <span class="valid"></span>
+  </span>
+
+  <ng-template #invalidReadGlobal>
+    <span class="invalid"></span>
+  </ng-template>
+
+</div>
+
+<div class="row">
+  Read Access to project ID {{validProject.id}} with Project permission
+
+  <span *fsAclRead="Permission.Project; object validProject.id; else invalidReadProject">
+    <span class="valid"></span>
+  </span>
+  <ng-template #invalidReadProject>
+    <span class="invalid"></span>
+  </ng-template>
+
+</div>
+
+<div class="row">
+  Read Access to project ID {{validProject.id}} with Project and Project Approval Permissions
+  <span *fsAclRead="[Permission.Project,Permission.ProjectApproval]; object validProject.id; require 'all'; else invalidReadAllProject">
+    <span class="valid"></span>
+  </span>
+  <ng-template #invalidReadAllProject>
+    <span class="invalid"></span>
+  </ng-template>
+</div>

@@ -1,6 +1,5 @@
 import {
   EmbeddedViewRef,
-  Input,
   OnChanges,
   OnDestroy,
   SimpleChanges,
@@ -13,15 +12,11 @@ import { takeUntil } from 'rxjs/operators';
 
 import { FsAclQueryService } from '../../services/acl-query.service';
 
+export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy {
 
-export class AclStructuredBaseDirective implements OnChanges, OnDestroy {
-
-  protected _context = {
-    $implicit: null,
-  };
+  protected abstract _checkPermissions(): boolean;
 
   protected _permissionObject = null;
-  protected _predicate = 'OR';
 
   protected _requestedPermissions: string[] = [];
 
@@ -39,37 +34,34 @@ export class AclStructuredBaseDirective implements OnChanges, OnDestroy {
     protected _aclQuery: FsAclQueryService
   ) {
     this._thenTemplateRef = _tempalteRef;
-
     this._listenPermissionsChange();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    this._checkPermissions();
+    this._updateView();
   }
 
   public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
-
     this._clear();
   }
 
-  protected _checkPermissions() {}
-
   protected _listenPermissionsChange() {
-    this._aclQuery.permissionsChange$
+    this._aclQuery.permissions$
       .pipe(
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this._checkPermissions();
+        this._updateView();
       });
   }
 
   protected _updateView() {
-    if (this._context.$implicit) {
+
+    if (this._checkPermissions()) {
       if (!this._thenViewRef) {
-        this._viewContainerRef.clear();
+        this._clear();
         this._elseViewRef = null;
 
         if (this._thenTemplateRef) {
@@ -78,7 +70,7 @@ export class AclStructuredBaseDirective implements OnChanges, OnDestroy {
       }
     } else {
       if (!this._elseViewRef) {
-        this._viewContainerRef.clear();
+        this._clear();
         this._thenViewRef = null;
 
         if (this._elseTemplateRef) {
@@ -88,10 +80,7 @@ export class AclStructuredBaseDirective implements OnChanges, OnDestroy {
     }
   }
 
-  protected _create() {}
-
   protected _clear() {
-
     this._viewContainerRef.clear();
   }
 }

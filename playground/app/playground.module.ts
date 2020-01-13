@@ -17,6 +17,8 @@ import {
 } from './components';
 import { AppComponent } from './app.component';
 import { KitchenSinkConfigureComponent } from './components/kitchen-sink-configure';
+import { ConfigurationComponent } from './components/configuration';
+import { AttributeComponent } from './components/attribute';
 
 const routes: Routes = [
   { path: '', component: ExamplesComponent },
@@ -26,7 +28,7 @@ const routes: Routes = [
   bootstrap: [ AppComponent ],
   imports: [
     BrowserModule,
-    FsAclModule,
+    FsAclModule.forRoot(),
     BrowserAnimationsModule,
     AppMaterialModule,
     FormsModule,
@@ -43,7 +45,9 @@ const routes: Routes = [
     AppComponent,
     ExamplesComponent,
     KitchenSinkComponent,
-    KitchenSinkConfigureComponent
+    KitchenSinkConfigureComponent,
+    ConfigurationComponent,
+    AttributeComponent
   ],
 })
 export class PlaygroundModule {

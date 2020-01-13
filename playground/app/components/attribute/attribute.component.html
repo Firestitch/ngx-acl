@@ -1,0 +1,37 @@
+<form fxLayout="column">
+  <mat-form-field>
+    <input
+      matInput
+      [fsAclEnable]="[Permission.Project,Permission.ProjectApproval]"
+      [fsAclRequire]="AclRequire.All"
+      [fsAclObject]="555"
+      [(ngModel)]="enabled"
+      name="enabled"
+      placeholder="Enabled">
+      <mat-hint>Enabled if as write Access to project ID 555 with Project and Project Approval Permissions</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      [fsAclDisable]="[Permission.Project,Permission.ProjectApproval]"
+      [fsAclRequire]="AclRequire.All"
+      [fsAclObject]="555"
+      [(ngModel)]="disabled"
+      name="disabled"
+      placeholder="Disabled">
+      <mat-hint>Disabled is does not have write Access to project ID 555 with Project and Project Approval Permissions</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      [fsAclEditable]="[Permission.Project,Permission.ProjectApproval]"
+      [fsAclRequire]="AclRequire.All"
+      [fsAclObject]="555"
+      [(ngModel)]="editable"
+      name="editable"
+      placeholder="Editable">
+      <mat-hint>Enabled if as write Access to project ID 555 with Project and Project Approval Permissions</mat-hint>
+  </mat-form-field>
+</form>

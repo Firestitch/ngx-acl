@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { KitchenSinkConfigureComponent } from '../kitchen-sink-configure';
-import { FsExampleComponent } from '@firestitch/example';
-import { FsMessage } from '@firestitch/message';
+import { AclAccesses } from '@firestitch/acl';
+import { Permission } from '../enums/permission';
+
 
 @Component({
   selector: 'kitchen-sink',
@@ -10,10 +10,8 @@ import { FsMessage } from '@firestitch/message';
 })
 export class KitchenSinkComponent {
 
-  public config = {};
-
-  constructor(private exampleComponent: FsExampleComponent,
-              private message: FsMessage) {
-    exampleComponent.setConfigureComponent(KitchenSinkConfigureComponent, { config: this.config });
-  }
+  public Permission = Permission;
+  public Accesses = AclAccesses;
+  public validProject = { id: 555 };
+  public invalidProject = { id: 999 };
 }

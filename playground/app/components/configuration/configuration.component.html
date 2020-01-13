@@ -1,0 +1,47 @@
+<table>
+  <tr>
+    <th>Permission</th>
+    <th>Access</th>
+    <th>Object</th>
+  </tr>
+  <tr *ngFor="let permission of permissions; let index = index">
+    <td>
+      <mat-form-field>
+        <mat-select
+          [(ngModel)]="permission.permission"
+          (ngModelChange)="change()"
+          name="permission_{{index}}">
+            <mat-option
+              *ngFor="let item of Permissions"
+              [value]="item.value">
+                {{ item.name }}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </td>
+    <td>
+      <mat-form-field>
+        <mat-select
+          [(ngModel)]="permission.access"
+          (ngModelChange)="change()"
+          name="access_{{index}}">
+            <mat-option
+              *ngFor="let item of Accesses"
+              [value]="item.value">
+                {{ item.name }}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </td>
+    <td>
+      <mat-form-field>
+        <input
+          matInput
+          (input)="change()"
+          [(ngModel)]="permission.object"
+          name="object_{{index}}">
+      </mat-form-field>
+    </td>
+  </tr>
+</table>
+

@@ -3,21 +3,25 @@ import {
   OnChanges,
   OnDestroy,
   SimpleChanges,
+  TemplateRef,
+  ViewContainerRef,
+  OnInit,
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FsAclQueryService } from '../../services/acl-query.service';
+import { AclRequire } from 'src/app/enums/acl-require.enum';
 
 
-export class AclAttributedBaseDirective implements OnChanges, OnDestroy {
+ export abstract class AclAttributedBaseDirective implements OnChanges, OnDestroy {
 
   @Input('aclObject')
   protected _permissionObject;
 
-  @Input('aclPredicate')
-  protected _predicate = 'OR';
+  @Input('aclRequire')
+  protected _require = AclRequire.Any;
 
   protected _hasValidAccess = false;
   protected _requestedPermissions: string[] = [];
@@ -37,10 +41,10 @@ export class AclAttributedBaseDirective implements OnChanges, OnDestroy {
     this._destroy$.complete();
   }
 
-  protected _checkPermissions() {}
+  protected abstract _checkPermissions();
 
   protected _listenPermissionsChange() {
-    this._aclQuery.permissionsChange$
+    this._aclQuery.permissions$
       .pipe(
         takeUntil(this._destroy$),
       )
