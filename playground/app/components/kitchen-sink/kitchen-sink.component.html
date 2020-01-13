@@ -14,7 +14,7 @@
 </div>
 
 <div class="row">
-  Full Access to project ID {{validProject.id}} with Project permission
+  Full Access to object ID {{validProject.id}} with Project permission
 
   <span *fsAclFull="Permission.Project; object validProject.id; else invalidFullProject">
     <span class="valid"></span>
@@ -26,7 +26,7 @@
 </div>
 
 <div class="row">
-  Full Access to project ID {{validProject.id}} with Project and Project Approval Permissions
+  Full Access to object ID {{validProject.id}} with Project and Project Approval Permissions
   <span *fsAclFull="[Permission.Project,Permission.ProjectApproval]; object validProject.id; require 'all'; else invalidFullAllProject">
     <span class="valid"></span>
   </span>
@@ -51,7 +51,7 @@
 </div>
 
 <div class="row">
-  Write Access to project ID {{validProject.id}} with Project permission
+  Write Access to object ID {{validProject.id}} with Project permission
 
   <span *fsAclWrite="Permission.Project; object validProject.id; else invalidWriteProject">
     <span class="valid"></span>
@@ -63,7 +63,7 @@
 </div>
 
 <div class="row">
-  Write Access to project ID {{validProject.id}} with Project and Project Approval Permissions
+  Write Access to object ID {{validProject.id}} with Project and Project Approval Permissions
   <span *fsAclWrite="[Permission.Project,Permission.ProjectApproval]; object validProject.id; require 'all'; else invalidWriteAllProject">
     <span class="valid"></span>
   </span>
@@ -88,7 +88,7 @@
 </div>
 
 <div class="row">
-  Read Access to project ID {{validProject.id}} with Project permission
+  Read Access to object ID {{validProject.id}} with Project permission
 
   <span *fsAclRead="Permission.Project; object validProject.id; else invalidReadProject">
     <span class="valid"></span>
@@ -100,7 +100,7 @@
 </div>
 
 <div class="row">
-  Read Access to project ID {{validProject.id}} with Project and Project Approval Permissions
+  Read Access to object ID {{validProject.id}} with Project and Project Approval Permissions
   <span *fsAclRead="[Permission.Project,Permission.ProjectApproval]; object validProject.id; require 'all'; else invalidReadAllProject">
     <span class="valid"></span>
   </span>

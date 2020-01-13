@@ -15,3 +15,10 @@
   content: '✖';
   color: red;
 }
+
+.valid, .invalid {
+  font-size: 19px;
+  font-weight: bold;
+  vertical-align: middle;
+  padding-left: 5px;
+}
