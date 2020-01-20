@@ -5,7 +5,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import { FsAclQueryService } from '../../services/acl-query.service';
+import { FsAcl } from '../../services/acl.service';
 import { AclAttributedBaseDirective } from './acl-attributed-base.directive';
 import { isArray } from 'lodash-es';
 import { AclRequire } from '../../enums';
@@ -33,13 +33,13 @@ export class AclEditableDirective extends AclAttributedBaseDirective implements 
   protected _require = AclRequire.Any;
 
   constructor(
-    protected _aclQuery: FsAclQueryService,
+    protected _aclQuery: FsAcl,
   ) {
     super(_aclQuery);
   }
 
   protected _checkPermissions() {
-    this._readonly = !this._aclQuery.canWrite(
+    this._readonly = !this._aclQuery.hasWrite(
       this._requestedPermissions,
       this._permissionObject,
       this._require

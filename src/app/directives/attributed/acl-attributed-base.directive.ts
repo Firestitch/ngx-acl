@@ -3,16 +3,13 @@ import {
   OnChanges,
   OnDestroy,
   SimpleChanges,
-  TemplateRef,
-  ViewContainerRef,
-  OnInit,
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { FsAclQueryService } from '../../services/acl-query.service';
-import { AclRequire } from 'src/app/enums/acl-require.enum';
+import { FsAcl } from '../../services/acl.service';
+import { AclRequire } from '../../enums/acl-require.enum';
 
 
  export abstract class AclAttributedBaseDirective implements OnChanges, OnDestroy {
@@ -28,7 +25,7 @@ import { AclRequire } from 'src/app/enums/acl-require.enum';
 
   protected _destroy$ = new Subject<void>();
 
-  constructor(protected _aclQuery: FsAclQueryService) {
+  constructor(protected _aclQuery: FsAcl) {
     this._listenPermissionsChange();
   }
 
@@ -44,7 +41,7 @@ import { AclRequire } from 'src/app/enums/acl-require.enum';
   protected abstract _checkPermissions();
 
   protected _listenPermissionsChange() {
-    this._aclQuery.permissions$
+    this._aclQuery.entries$
       .pipe(
         takeUntil(this._destroy$),
       )

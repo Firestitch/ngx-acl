@@ -7,10 +7,10 @@ import { AclDisableDirective } from './directives/attributed/acl-disable.directi
 import { AclEnableDirective } from './directives/attributed/acl-enable.directive';
 import { AclEditableDirective } from './directives/attributed/acl-editable.directive';
 
-import { FsAclQueryService } from './services/acl-query.service';
+import { FsAcl } from './services/acl.service';
 
 import { FsAclGuard } from './guards/acl.guard';
-import { FormsModule, NgControl } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -39,7 +39,7 @@ export class FsAclModule {
     return {
       ngModule: FsAclModule,
       providers: [
-        FsAclQueryService,
+        FsAcl,
         FsAclGuard
       ]
     };

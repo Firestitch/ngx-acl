@@ -1,7 +1,7 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { AclStructuredBaseDirective } from './acl-structured-base.directive';
-import { FsAclQueryService } from '../../services/acl-query.service';
+import { FsAcl } from '../../services/acl.service';
 import { isArray } from 'lodash-es';
 import { AclRequire } from '../../enums/acl-require.enum';
 
@@ -39,13 +39,13 @@ export class AclFullDirective extends AclStructuredBaseDirective {
   constructor(
     protected _tempalteRef: TemplateRef<null>,
     protected _viewContainerRef: ViewContainerRef,
-    protected _aclQuery: FsAclQueryService
+    protected _aclQuery: FsAcl
   ) {
     super(_tempalteRef, _viewContainerRef, _aclQuery);
   }
 
   protected _checkPermissions() {
-    return this._aclQuery.canFull(
+    return this._aclQuery.hasFull(
       this._requestedPermissions,
       this._permissionObject,
       this._require

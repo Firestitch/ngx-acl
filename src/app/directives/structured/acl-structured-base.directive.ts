@@ -10,7 +10,7 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { FsAclQueryService } from '../../services/acl-query.service';
+import { FsAcl } from '../../services/acl.service';
 
 export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy {
 
@@ -31,7 +31,7 @@ export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy
   constructor(
     protected _tempalteRef: TemplateRef<null>,
     protected _viewContainerRef: ViewContainerRef,
-    protected _aclQuery: FsAclQueryService
+    protected _aclQuery: FsAcl
   ) {
     this._thenTemplateRef = _tempalteRef;
     this._listenPermissionsChange();
@@ -48,7 +48,7 @@ export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy
   }
 
   protected _listenPermissionsChange() {
-    this._aclQuery.permissions$
+    this._aclQuery.entries$
       .pipe(
         takeUntil(this._destroy$),
       )

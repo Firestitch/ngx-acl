@@ -6,10 +6,10 @@ import {
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
-import { FsAclQueryService } from '../../services/acl-query.service';
+import { FsAcl } from '../../services/acl.service';
 import { AclAttributedBaseDirective } from './acl-attributed-base.directive';
 import { isArray } from 'lodash-es';
-import { AclRequire } from 'src/app/enums';
+import { AclRequire } from '../../enums';
 
 
 @Directive({
@@ -31,14 +31,14 @@ export class AclDisableDirective extends AclAttributedBaseDirective implements O
   protected _require = AclRequire.Any;
 
   constructor(
-    protected _aclQuery: FsAclQueryService,
+    protected _aclQuery: FsAcl,
     @Optional() protected _ngControl: NgControl,
   ) {
     super(_aclQuery);
   }
 
   protected _checkPermissions() {
-    const valid = this._aclQuery.canWrite(
+    const valid = this._aclQuery.hasWrite(
       this._requestedPermissions,
       this._permissionObject,
       this._require

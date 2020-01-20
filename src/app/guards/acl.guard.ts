@@ -7,14 +7,14 @@ import {
 } from '@angular/router';
 import { Injectable } from '@angular/core';
 
-import { FsAclQueryService } from '../services/acl-query.service';
+import { FsAcl } from '../services/acl.service';
 import { AclRequire } from '../enums/acl-require.enum';
 
 
 @Injectable()
 export class FsAclGuard implements CanActivate, CanActivateChild {
 
-  constructor(private _aclQueryService: FsAclQueryService, private _router: Router) {}
+  constructor(private _aclQueryService: FsAcl, private _router: Router) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
@@ -52,15 +52,15 @@ export class FsAclGuard implements CanActivate, CanActivateChild {
     let canActivate = true;
 
     if (routeAcl.read && Array.isArray(routeAcl.read)) {
-      canActivate = this._aclQueryService.canRead(routeAcl.read, null, aclRequire);
+      canActivate = this._aclQueryService.hasRead(routeAcl.read, null, aclRequire);
     }
 
     if (canActivate && routeAcl.write && Array.isArray(routeAcl.write)) {
-      canActivate = canActivate && this._aclQueryService.canWrite(routeAcl.write, null, aclRequire);
+      canActivate = canActivate && this._aclQueryService.hasWrite(routeAcl.write, null, aclRequire);
     }
 
     if (canActivate && routeAcl.full && Array.isArray(routeAcl.full)) {
-      canActivate = canActivate && this._aclQueryService.canFull(routeAcl.full, null, aclRequire);
+      canActivate = canActivate && this._aclQueryService.hasFull(routeAcl.full, null, aclRequire);
     }
 
     return canActivate;

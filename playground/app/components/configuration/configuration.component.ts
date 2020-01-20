@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FsAclQueryService, AclAccess, AclAccesses } from '@firestitch/acl';
+import { FsAcl, AclAccess, AclAccesses, AclEntry } from '@firestitch/acl';
 import { Permission } from '../enums/permission';
 import { Permissions } from '../consts/permissions';
 import { toNumber } from 'lodash-es';
@@ -34,17 +34,17 @@ export class ConfigurationComponent {
     }
   ];
 
-  constructor(private _aclQuery: FsAclQueryService) {
+  constructor(private _acl: FsAcl) {
     this.change();
   }
 
   public change() {
 
-    const permissions = this.permissions.map(item => {
+    const aclEntries: AclEntry[] = this.permissions.map(item => {
       item.object = item.object ? toNumber(item.object) : null;
       return item;
     });
 
-    this._aclQuery.setPermissions(permissions);
+    this._acl.setEntries(aclEntries);
   }
 }
