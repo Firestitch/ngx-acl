@@ -4,44 +4,46 @@
     <th>Access</th>
     <th>Object</th>
   </tr>
-  <tr *ngFor="let permission of permissions; let index = index">
-    <td>
-      <mat-form-field>
-        <mat-select
-          [(ngModel)]="permission.permission"
-          (ngModelChange)="change()"
-          name="permission_{{index}}">
+  <ng-container *ngFor="let entry of entries; let index = index">
+    <tr *ngFor="let permission of entry.permissions; let index = index">
+      <td>
+        <mat-form-field>
+          <mat-select
+            [(ngModel)]="permission.value"
+            (ngModelChange)="change()"
+            name="permission_{{index}}">
             <mat-option
               *ngFor="let item of Permissions"
               [value]="item.value">
-                {{ item.name }}
+              {{ item.name }}
             </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field>
-        <mat-select
-          [(ngModel)]="permission.access"
-          (ngModelChange)="change()"
-          name="access_{{index}}">
+          </mat-select>
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <mat-select
+            [(ngModel)]="permission.access"
+            (ngModelChange)="change()"
+            name="access_{{index}}">
             <mat-option
               *ngFor="let item of Accesses"
               [value]="item.value">
-                {{ item.name }}
+              {{ item.name }}
             </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field>
-        <input
-          matInput
-          (input)="change()"
-          [(ngModel)]="permission.object"
-          name="object_{{index}}">
-      </mat-form-field>
-    </td>
-  </tr>
+          </mat-select>
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input
+            matInput
+            (input)="change()"
+            [(ngModel)]="entry.objectId"
+            name="object_{{index}}">
+        </mat-form-field>
+      </td>
+    </tr>
+  </ng-container>
 </table>
 

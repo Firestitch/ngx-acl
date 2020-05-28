@@ -1,29 +1,32 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { AclAccess } from '../enums/acl-access.enum';
-import { AclEntry } from '../interfaces/acl-entry';
-import { AclRequire } from '../enums/acl-require.enum';
 import { isArray } from 'lodash-es';
+
+import { AclEntry } from '../interfaces/acl-entry';
+import { AclStoreEntry } from '../interfaces/acl-store';
+import { AclAccess } from '../enums/acl-access.enum';
+import { AclRequire } from '../enums/acl-require.enum';
+import { entriesToStore } from '../helpers/entries-transformer';
 
 
 @Injectable()
 export class FsAcl {
 
-  private _entries = new BehaviorSubject<AclEntry[]>([]);
+  private _entries = new BehaviorSubject<Map<string, AclStoreEntry>>(new Map());
 
   constructor() {}
 
-  get entries$(): Observable<AclEntry[]> {
+  get entries$(): Observable<Map<string, AclStoreEntry>> {
     return this._entries.asObservable();
   }
 
-  get entries(): AclEntry[] {
+  get entries(): Map<string, AclStoreEntry> {
     return this._entries.getValue();
   }
 
   public setEntries(aclEntries: AclEntry[]) {
-    this._entries.next(aclEntries);
+    this._entries.next(entriesToStore(aclEntries));
   }
 
   public clear() {
@@ -42,47 +45,42 @@ export class FsAcl {
     return this.has(permissions, AclAccess.Full, object, require);
   }
 
-  public has(permissions: string[] | string, access: AclAccess = null, object = null, require = AclRequire.Any) {
+  public has(
+    permissions: string[] | string,
+    access: AclAccess = null,
+    objects = null,
+    require = AclRequire.Any
+  ) {
 
-    const _permissions = isArray(permissions) ? Array.from(permissions) : [permissions];
+    const permissionsArray = isArray(permissions) ? Array.from(permissions) : [permissions];
+    const objectsArray: (number | null)[] = isArray(objects) ? Array.from(objects) : [objects];
 
-    let has = false;
-    if (this.entries.length) {
-      if (require === AclRequire.Any) {
-        has = _permissions.some((permission) => {
-          return this._weightPermissions(access, permission, object);
-        });
-      } else {
-        has = _permissions.every((permission) => {
-          return this._weightPermissions(access, permission, object);
-        });
-      }
-    }
-
-    return has;
-  }
-
-  private _weightPermissions(access: AclAccess, permission, object): boolean {
-
-    if (!this.entries.length) {
+    if (!this.entries.size) {
       return false;
     }
 
-    if (object) {
-
-      const aclPermission = this.entries.find(item => {
-        return item.object === object && (!permission || (item.permission === permission));
+    if (require === AclRequire.Any) {
+      return permissionsArray.some((permission) => {
+        return this._weightPermissions(access, permission, objectsArray);
       });
-
-      return aclPermission && (aclPermission.access >= access || access === null);
-
     } else {
-
-      const aclPermission = this.entries.find(item => {
-        return item.object === null && (!permission || (item.permission === permission))
+      return permissionsArray.every((permission) => {
+        return this._weightPermissions(access, permission, objectsArray);
       });
-
-      return aclPermission && (aclPermission.access >= access || access === null);
     }
+  }
+
+  private _weightPermissions(access: AclAccess, permission, objects: (number | null)[]): boolean {
+    const objectsList = this.entries.get(permission);
+
+    if (!objectsList) { return false; }
+
+    return objects.some((object) => {
+      const objectAccess = objectsList.get(object);
+
+      if (!objectAccess) { return false }
+
+      return objectAccess >= access;
+    });
   }
 }

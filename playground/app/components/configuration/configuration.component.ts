@@ -16,23 +16,31 @@ export class ConfigurationComponent {
   public Accesses = AclAccesses;
   public Permissions = Permissions;
   public validProject = { id: 555 };
-  public permissions = [
+  public entries = [
     {
-      permission: Permission.Project,
-      access: AclAccess.Full,
-      object: this.validProject.id
+      objectId: null,
+      permissions: [
+        {
+          value: Permission.Project,
+          access: AclAccess.Full,
+        },
+        {
+          value: Permission.ProjectApproval,
+          access: AclAccess.Full,
+        },
+      ],
     },
     {
-      permission: Permission.ProjectApproval,
-      access: AclAccess.Full,
-      object: this.validProject.id
+      objectId: this.validProject.id,
+      permissions: [
+        {
+          value: Permission.Project,
+          access: AclAccess.Full,
+        },
+      ],
     },
-    {
-      permission: Permission.Project,
-      access: AclAccess.Full,
-      object: null
-    }
   ];
+
 
   constructor(private _acl: FsAcl) {
     this.change();
@@ -40,10 +48,7 @@ export class ConfigurationComponent {
 
   public change() {
 
-    const aclEntries: AclEntry[] = this.permissions.map(item => {
-      item.object = item.object ? toNumber(item.object) : null;
-      return item;
-    });
+    const aclEntries: AclEntry[] = this.entries;
 
     this._acl.setEntries(aclEntries);
   }
