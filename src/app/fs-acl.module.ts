@@ -35,7 +35,7 @@ import { FormsModule } from '@angular/forms';
   ]
 })
 export class FsAclModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<FsAclModule> {
     return {
       ngModule: FsAclModule,
       providers: [

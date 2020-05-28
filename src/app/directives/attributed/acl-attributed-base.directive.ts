@@ -1,9 +1,4 @@
-import {
-  Input,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-} from '@angular/core';
+import { Input, OnChanges, OnDestroy, SimpleChanges, Directive } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -12,7 +7,8 @@ import { FsAcl } from '../../services/acl.service';
 import { AclRequire } from '../../enums/acl-require.enum';
 
 
- export abstract class AclAttributedBaseDirective implements OnChanges, OnDestroy {
+ @Directive()
+export abstract class AclAttributedBaseDirective implements OnChanges, OnDestroy {
 
   @Input('aclObject')
   protected _permissionObject;
