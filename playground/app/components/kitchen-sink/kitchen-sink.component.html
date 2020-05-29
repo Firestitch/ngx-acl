@@ -35,6 +35,16 @@
   </ng-template>
 </div>
 
+<div class="row">
+  Full Access to object ID {{validProject.id}} with Project Permission or Full Access to global with Project Permission
+  <span *fsAclFull="Permission.Project; object [validProject.id,null]; require 'any'; else invalidFullAllProjectGlobal">
+    <span class="valid"></span>
+  </span>
+  <ng-template #invalidFullAllProjectGlobal>
+    <span class="invalid"></span>
+  </ng-template>
+</div>
+
 <h2>Write Access</h2>
 
 <div class="row">
@@ -52,7 +62,6 @@
 
 <div class="row">
   Write Access to object ID {{validProject.id}} with Project permission
-
   <span *fsAclWrite="Permission.Project; object validProject.id; else invalidWriteProject">
     <span class="valid"></span>
   </span>
@@ -70,6 +79,18 @@
   <ng-template #invalidWriteAllProject>
     <span class="invalid"></span>
   </ng-template>
+</div>
+
+<div class="row">
+  Write Access to object ID {{validProject.id}} with Project permission or Write Access to global with Project permission
+
+  <span *fsAclWrite="Permission.Project; object [validProject.id, null]; else invalidWriteProjectGloabl">
+    <span class="valid"></span>
+  </span>
+  <ng-template #invalidWriteProjectGloabl>
+    <span class="invalid"></span>
+  </ng-template>
+
 </div>
 
 <h2>Read Access</h2>
@@ -105,6 +126,17 @@
     <span class="valid"></span>
   </span>
   <ng-template #invalidReadAllProject>
+    <span class="invalid"></span>
+  </ng-template>
+</div>
+
+
+<div class="row">
+  Read Access to object ID {{validProject.id}} with Project Permission or Read Access to global with Project Permissions
+  <span *fsAclRead="Permission.Project; object [validProject.id, null]; require 'any'; else invalidReadAllProjectGlobal">
+    <span class="valid"></span>
+  </span>
+  <ng-template #invalidReadAllProjectGlobal>
     <span class="invalid"></span>
   </ng-template>
 </div>
