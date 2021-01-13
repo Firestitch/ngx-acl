@@ -8,15 +8,13 @@ import { AclEnableDirective } from './directives/attributed/acl-enable.directive
 import { AclEditableDirective } from './directives/attributed/acl-editable.directive';
 
 import { FsAcl } from './services/acl.service';
+import { FsAclCache } from './services/acl-cache.service';
 
 import { FsAclGuard } from './guards/acl.guard';
-import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
-  imports: [
-    FormsModule
-  ],
+  imports: [],
   declarations: [
     AclReadDirective,
     AclWriteDirective,
@@ -40,7 +38,8 @@ export class FsAclModule {
       ngModule: FsAclModule,
       providers: [
         FsAcl,
-        FsAclGuard
+        FsAclGuard,
+        FsAclCache,
       ]
     };
   }

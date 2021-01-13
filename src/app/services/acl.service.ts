@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { isArray } from 'lodash-es';
-
 import { AclEntry } from '../interfaces/acl-entry';
 import { AclStoreEntry } from '../interfaces/acl-store';
 import { AclAccess } from '../enums/acl-access.enum';
 import { AclRequire } from '../enums/acl-require.enum';
 import { entriesToStore } from '../helpers/entries-transformer';
+import { FsAclCache } from './acl-cache.service';
 
 
 @Injectable()
@@ -15,7 +14,9 @@ export class FsAcl {
 
   private _entries = new BehaviorSubject<Map<string, AclStoreEntry>>(new Map());
 
-  constructor() {}
+  constructor(
+    private _cache: FsAclCache,
+  ) {}
 
   get entries$(): Observable<Map<string, AclStoreEntry>> {
     return this._entries.asObservable();
@@ -26,6 +27,7 @@ export class FsAcl {
   }
 
   public setEntries(aclEntries: AclEntry[]) {
+    this._cache.clear();
     this._entries.next(entriesToStore(aclEntries));
   }
 
@@ -51,22 +53,37 @@ export class FsAcl {
     objects = null,
     require = AclRequire.Any
   ) {
+    // Check cache first
+    const cachedValue = this._cache.get(permissions, access, objects, require);
 
-    const permissionsArray = isArray(permissions) ? Array.from(permissions) : [permissions];
-    const objectsArray: (number | null)[] = isArray(objects) ? Array.from(objects) : [objects];
+    if (cachedValue !== null) {
+      return cachedValue;
+    }
+
+    // If no cached value then...
+    const permissionsArray = Array.isArray(permissions) ? Array.from(permissions) : [permissions];
+    const objectsArray: (number | null)[] = Array.isArray(objects) ? Array.from(objects) : [objects];
 
     if (!this.entries.size) {
       return false;
     }
 
     if (require === AclRequire.Any) {
-      return permissionsArray.some((permission) => {
+      const value = permissionsArray.some((permission) => {
         return this._weightPermissions(access, permission, objectsArray);
       });
+
+      this._cache.set(permissions, access, objects, require, value);
+
+      return value;
     } else {
-      return permissionsArray.every((permission) => {
+      const value = permissionsArray.every((permission) => {
         return this._weightPermissions(access, permission, objectsArray);
       });
+
+      this._cache.set(permissions, access, objects, require, value);
+
+      return value;
     }
   }
 
