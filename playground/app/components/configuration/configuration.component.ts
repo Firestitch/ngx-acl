@@ -2,13 +2,12 @@ import { Component } from '@angular/core';
 import { FsAcl, AclAccess, AclAccesses, AclEntry } from '@firestitch/acl';
 import { Permission } from '../enums/permission';
 import { Permissions } from '../consts/permissions';
-import { toNumber } from 'lodash-es';
 
 
 @Component({
   selector: 'app-configuration',
   templateUrl: 'configuration.component.html',
-  styleUrls: ['configuration.component.scss']
+  styleUrls: ['configuration.component.scss'],
 })
 export class ConfigurationComponent {
 
@@ -16,6 +15,7 @@ export class ConfigurationComponent {
   public Accesses = AclAccesses;
   public Permissions = Permissions;
   public validProject = { id: 555 };
+
   public entries = [
     {
       objectId: null,
@@ -47,9 +47,7 @@ export class ConfigurationComponent {
   }
 
   public change() {
-
     const aclEntries: AclEntry[] = this.entries;
-
     this._acl.setEntries(aclEntries);
   }
 }

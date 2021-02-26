@@ -6,7 +6,7 @@ import { Permission } from '../enums/permission';
 @Component({
   selector: 'kitchen-sink',
   templateUrl: 'kitchen-sink.component.html',
-  styleUrls: ['kitchen-sink.component.scss']
+  styleUrls: ['kitchen-sink.component.scss'],
 })
 export class KitchenSinkComponent {
 
@@ -14,4 +14,6 @@ export class KitchenSinkComponent {
   public Accesses = AclAccesses;
   public validProject = { id: 555 };
   public invalidProject = { id: 999 };
+
+
 }

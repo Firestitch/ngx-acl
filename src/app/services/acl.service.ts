@@ -49,8 +49,8 @@ export class FsAcl {
 
   public has(
     permissions: string[] | string,
-    access: AclAccess = null,
-    objects = null,
+    access?: AclAccess,
+    objects?: number | number[],
     require = AclRequire.Any
   ) {
     // Check cache first
@@ -62,42 +62,43 @@ export class FsAcl {
 
     // If no cached value then...
     const permissionsArray = Array.isArray(permissions) ? Array.from(permissions) : [permissions];
-    const objectsArray: (number | null)[] = Array.isArray(objects) ? Array.from(objects) : [objects];
+    let objectsArray: (number | null)[];
+
+    if (objects !== undefined) {
+      objectsArray = Array.isArray(objects) ? Array.from(objects) : [objects];
+    }
 
     if (!this.entries.size) {
       return false;
     }
 
-    if (require === AclRequire.Any) {
-      const value = permissionsArray.some((permission) => {
-        return this._weightPermissions(access, permission, objectsArray);
+    const value = require === AclRequire.Any ?
+      permissionsArray.some((permission) => {
+        return this._weightPermissions(permission, access, objectsArray);
+      }) :
+      permissionsArray.every((permission) => {
+        return this._weightPermissions(permission, access, objectsArray);
       });
 
-      this._cache.set(permissions, access, objects, require, value);
+    this._cache.set(permissions, access, objects, require, value);
 
-      return value;
-    } else {
-      const value = permissionsArray.every((permission) => {
-        return this._weightPermissions(access, permission, objectsArray);
-      });
-
-      this._cache.set(permissions, access, objects, require, value);
-
-      return value;
-    }
+    return value;
   }
 
-  private _weightPermissions(access: AclAccess, permission, objects: (number | null)[]): boolean {
+  private _weightPermissions(permission, access?: AclAccess, objects?: (number | null)[]): boolean {
     const objectsList = this.entries.get(permission);
 
-    if (!objectsList) { return false; }
+    if (!objectsList) {
+      return false;
+    }
+
+    if (objects === undefined) {
+      objects = Array.from(objectsList.keys());
+    }
 
     return objects.some((object) => {
       const objectAccess = objectsList.get(object);
-
-      if (!objectAccess) { return false }
-
-      return objectAccess >= access;
+      return objectAccess && objectAccess >= (access || 0);
     });
   }
 }

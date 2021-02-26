@@ -21,6 +21,6 @@ function addPermissionToStore(store: Map<string, AclStoreEntry>, objectId: numbe
   }
 
   const objectsList = store.get(permission.value);
-
+  objectId = objectId ? Number(objectId) : objectId;
   objectsList.set(objectId, permission.access);
 }
