@@ -1,17 +1,11 @@
-import {
-  EmbeddedViewRef,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-  TemplateRef,
-  ViewContainerRef
-} from '@angular/core';
+import { EmbeddedViewRef, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewContainerRef, Directive } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FsAcl } from '../../services/acl.service';
 
+@Directive()
 export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy {
 
   protected abstract _checkPermissions(): boolean;
