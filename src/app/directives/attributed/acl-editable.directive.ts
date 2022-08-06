@@ -7,7 +7,6 @@ import {
 
 import { FsAcl } from '../../services/acl.service';
 import { AclAttributedBaseDirective } from './acl-attributed-base.directive';
-import { isArray } from 'lodash-es';
 import { AclRequire } from '../../enums';
 
 
@@ -18,7 +17,7 @@ export class AclEditableDirective extends AclAttributedBaseDirective implements 
 
   @Input('fsAclEditable')
   set fsAclEditable(value) {
-    this._requestedPermissions = isArray(value) ? value : [value];
+    this._requestedPermissions = Array.isArray(value) ? value : [value];
   }
 
   @HostBinding('readonly')

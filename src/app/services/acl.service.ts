@@ -1,34 +1,32 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { AclEntry } from '../interfaces/acl-entry';
-import { AclStoreEntry } from '../interfaces/acl-store';
+import { AclEntry, AclPermission } from '../interfaces/acl-entry';
 import { AclAccess } from '../enums/acl-access.enum';
 import { AclRequire } from '../enums/acl-require.enum';
-import { entriesToStore } from '../helpers/entries-transformer';
 import { FsAclCache } from './acl-cache.service';
 
 
 @Injectable()
 export class FsAcl {
 
-  private _entries = new BehaviorSubject<Map<string, AclStoreEntry>>(new Map());
+  private _entries = new BehaviorSubject<AclEntry[]>([]);
 
-  constructor(
+  public constructor(
     private _cache: FsAclCache,
   ) {}
 
-  get entries$(): Observable<Map<string, AclStoreEntry>> {
+  public get entries$(): Observable<AclEntry[]> {
     return this._entries.asObservable();
   }
 
-  get entries(): Map<string, AclStoreEntry> {
+  public get entries(): AclEntry[] {
     return this._entries.getValue();
   }
 
   public setEntries(aclEntries: AclEntry[]) {
     this._cache.clear();
-    this._entries.next(entriesToStore(aclEntries));
+    this._entries.next(aclEntries);
   }
 
   public clear() {
@@ -51,7 +49,8 @@ export class FsAcl {
     permissions: string[] | string,
     access?: AclAccess,
     objects?: number | number[],
-    require = AclRequire.Any
+    require = AclRequire.Any,
+    aclEntries?: AclEntry[],
   ) {
     // Check cache first
     const cachedValue = this._cache.get(permissions, access, objects, require);
@@ -68,16 +67,18 @@ export class FsAcl {
       objectsArray = Array.isArray(objects) ? Array.from(objects) : [objects];
     }
 
-    if (!this.entries.size) {
+    aclEntries = aclEntries === undefined ? this.entries : aclEntries;
+
+    if (!aclEntries.length) {
       return false;
     }
 
     const value = require === AclRequire.Any ?
       permissionsArray.some((permission) => {
-        return this._weightPermissions(permission, access, objectsArray);
+        return this._weightPermissions(aclEntries, permission, access, objectsArray);
       }) :
       permissionsArray.every((permission) => {
-        return this._weightPermissions(permission, access, objectsArray);
+        return this._weightPermissions(aclEntries, permission, access, objectsArray);
       });
 
     this._cache.set(permissions, access, objects, require, value);
@@ -85,20 +86,16 @@ export class FsAcl {
     return value;
   }
 
-  private _weightPermissions(permission, access?: AclAccess, objects?: (number | null)[]): boolean {
-    const objectsList = this.entries.get(permission);
+  private _weightPermissions(aclEntries: AclEntry[], permission: string, access?: AclAccess, objects?: (number | null)[]): boolean {
+    return aclEntries.some((aclEntry) => {
+      if (objects !== undefined && objects.indexOf(aclEntry.objectId) === -1) {
+        return false;
+      }
 
-    if (!objectsList) {
-      return false;
-    }
-
-    if (objects === undefined) {
-      objects = Array.from(objectsList.keys());
-    }
-
-    return objects.some((object) => {
-      const objectAccess = objectsList.get(object);
-      return objectAccess && objectAccess >= (access || 0);
+      return aclEntry.permissions
+        .some((aclPermission: AclPermission) => {
+          return (!permission || aclPermission.value === permission) && (aclPermission.access || 0) >= (access || 0);
+        });
     });
   }
 }

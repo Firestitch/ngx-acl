@@ -2,7 +2,6 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { AclStructuredBaseDirective } from './acl-structured-base.directive';
 import { FsAcl } from '../../services/acl.service';
-import { isArray } from 'lodash-es';
 import { AclRequire } from '../../enums/acl-require.enum';
 
 
@@ -13,7 +12,7 @@ export class AclWriteDirective extends AclStructuredBaseDirective {
 
   @Input('fsAclWrite')
   set fsAclWrite(value) {
-    this._requestedPermissions = isArray(value) ? value : [value];
+    this._requestedPermissions = Array.isArray(value) ? value : [value];
   }
 
   @Input()

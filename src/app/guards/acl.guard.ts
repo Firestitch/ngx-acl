@@ -14,9 +14,9 @@ import { AclRequire } from '../enums/acl-require.enum';
 @Injectable()
 export class FsAclGuard implements CanActivate, CanActivateChild {
 
-  constructor(private _aclQueryService: FsAcl, private _router: Router) {}
+  public constructor(private _aclQueryService: FsAcl, private _router: Router) {}
 
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
     if (this._canActivate(next.data.acl)) {
       return true;
@@ -27,7 +27,7 @@ export class FsAclGuard implements CanActivate, CanActivateChild {
     }
   }
 
-  canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  public canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
     if (this._canActivate(next.data.acl)) {
       return true;
@@ -39,7 +39,6 @@ export class FsAclGuard implements CanActivate, CanActivateChild {
   }
 
   private _canActivate(routeAcl) {
-
     if (!routeAcl) {
       return true;
     }

@@ -19,25 +19,18 @@ export class ConfigurationComponent {
   public entries = [
     {
       objectId: null,
-      permissions: [
-        {
-          value: Permission.Project,
-          access: AclAccess.Full,
-        },
-        {
-          value: Permission.ProjectApproval,
-          access: AclAccess.Full,
-        },
-      ],
+      permission: Permission.Project,
+      access: AclAccess.Full,
     },
     {
       objectId: this.validProject.id,
-      permissions: [
-        {
-          value: Permission.Project,
-          access: AclAccess.Full,
-        },
-      ],
+      permission: Permission.ProjectApproval,
+      access: AclAccess.Full,
+    },    
+    {
+      objectId: this.validProject.id,
+      permission: Permission.Project,
+      access: AclAccess.Full,
     },
   ];
 
@@ -47,7 +40,25 @@ export class ConfigurationComponent {
   }
 
   public change() {
-    const aclEntries: AclEntry[] = this.entries;
+    const aclEntries: AclEntry[] = Object.values(this.entries
+    .reduce((accum, aclEntry) => {
+
+      if(!accum[aclEntry.objectId]) {
+        accum[aclEntry.objectId] = {
+          objectId: aclEntry.objectId ? Number(aclEntry.objectId) : null,
+          permissions: [],
+        }
+      }
+
+      accum[aclEntry.objectId].permissions
+      .push({
+        value: aclEntry.permission,
+        access: aclEntry.access,
+      });
+
+      return accum;
+    }, {}));
+
     this._acl.setEntries(aclEntries);
   }
 }
