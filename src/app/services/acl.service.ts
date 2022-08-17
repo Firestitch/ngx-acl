@@ -52,11 +52,19 @@ export class FsAcl {
     require = AclRequire.Any,
     aclEntries?: AclEntry[],
   ) {
-    // Check cache first
-    const cachedValue = this._cache.get(permissions, access, objects, require);
+    aclEntries = Array.isArray(aclEntries) ? aclEntries : this.entries;
+    if (!aclEntries.length) {
+      return false;
+    }    
 
-    if (cachedValue !== null) {
-      return cachedValue;
+    // Check cache first
+    const cache = aclEntries === this.entries;
+    if (cache) {
+      const cacheValue = this._cache.get(permissions, access, objects, require);
+
+      if (cacheValue !== null) {
+        return cacheValue;
+      }
     }
 
     // If no cached value then...
@@ -67,12 +75,6 @@ export class FsAcl {
       objectsArray = Array.isArray(objects) ? Array.from(objects) : [objects];
     }
 
-    aclEntries = aclEntries === undefined ? this.entries : aclEntries;
-
-    if (!aclEntries.length) {
-      return false;
-    }
-
     const value = require === AclRequire.Any ?
       permissionsArray.some((permission) => {
         return this._weightPermissions(aclEntries, permission, access, objectsArray);
@@ -81,7 +83,9 @@ export class FsAcl {
         return this._weightPermissions(aclEntries, permission, access, objectsArray);
       });
 
-    this._cache.set(permissions, access, objects, require, value);
+    if(cache) {
+      this._cache.set(permissions, access, objects, require, value);
+    }
 
     return value;
   }
