@@ -1,105 +1,108 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { AclEntry, AclPermission } from '../interfaces/acl-entry';
+import { AclEntry } from '../interfaces/acl-entry';
 import { AclAccess } from '../enums/acl-access.enum';
 import { AclRequire } from '../enums/acl-require.enum';
-import { FsAclCache } from './acl-cache.service';
+// import { FsAclCache } from './acl-cache.service';
+import { AclComplexPermission } from '../interfaces/acl-complex-permission';
+import { AclEntriesList } from '../interfaces/acl-entris-list';
+import { transformEntriers } from '../helpers/transform-entriers';
+import { generatePermissions } from '../helpers/generate-permissions';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class FsAcl {
 
-  private _entries = new BehaviorSubject<AclEntry[]>([]);
+  private _entries = new BehaviorSubject<AclEntriesList>(new Map());
 
   public constructor(
-    private _cache: FsAclCache,
+    // private _cache: FsAclCache,
   ) {}
 
-  public get entries$(): Observable<AclEntry[]> {
+  public get entries$(): Observable<AclEntriesList> {
     return this._entries.asObservable();
   }
 
-  public get entries(): AclEntry[] {
+  public get entries(): AclEntriesList {
     return this._entries.getValue();
   }
 
   public setEntries(aclEntries: AclEntry[]) {
-    this._cache.clear();
-    this._entries.next(aclEntries);
+    // this._cache.clear();
+    const entries = transformEntriers(aclEntries);
+
+    this._entries.next(entries);
   }
 
   public clear() {
-    this._entries.next(null);
+    this._entries.next(new Map());
   }
 
-  public hasRead(permissions: string[] | string, object = null, require = AclRequire.Any) {
+  public hasRead(permissions: (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
     return this.has(permissions, AclAccess.Read, object, require);
   }
 
-  public hasWrite(permissions: string[] | string, object = null, require = AclRequire.Any) {
+  public hasWrite(permissions: (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
     return this.has(permissions, AclAccess.Write, object, require);
   }
 
-  public hasFull(permissions: string[] | string, object = null, require = AclRequire.Any) {
+  public hasFull(permissions: (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
     return this.has(permissions, AclAccess.Full, object, require);
   }
 
   public has(
-    permissions: string[] | string,
+    permissions: string | (string | AclComplexPermission)[],
     access?: AclAccess,
     objects?: number | number[],
     require = AclRequire.Any,
     aclEntries?: AclEntry[],
   ) {
-    aclEntries = Array.isArray(aclEntries) ? aclEntries : this.entries;
-    if (!aclEntries.length) {
-      return false;
-    }    
+    const entries = !!aclEntries
+      ? transformEntriers(aclEntries)
+      : this.entries;
 
-    // Check cache first
-    const cache = aclEntries === this.entries;
-    if (cache) {
-      const cacheValue = this._cache.get(permissions, access, objects, require);
+    permissions = Array.isArray(permissions) ? permissions : [permissions];
+    objects = typeof objects === 'number' ? [objects] : objects;
 
-      if (cacheValue !== null) {
-        return cacheValue;
-      }
-    }
+    const requestedPermissions: AclComplexPermission[] = permissions
+      .reduce((acc, permission) => {
+        if (typeof permission === 'string') {
+          acc.push(...generatePermissions(permission, objects as any));
+        } else {
+          acc.push(permission);
+        }
 
-    // If no cached value then...
-    const permissionsArray = Array.isArray(permissions) ? Array.from(permissions) : [permissions];
-    let objectsArray: (number | null)[];
+        return acc;
+      }, []);
 
-    if (objects !== undefined) {
-      objectsArray = Array.isArray(objects) ? Array.from(objects) : [objects];
-    }
 
-    const value = require === AclRequire.Any ?
-      permissionsArray.some((permission) => {
-        return this._weightPermissions(aclEntries, permission, access, objectsArray);
-      }) :
-      permissionsArray.every((permission) => {
-        return this._weightPermissions(aclEntries, permission, access, objectsArray);
+    if (require === AclRequire.Any) {
+      return requestedPermissions.some((permission) => {
+        return this._weightPermissions(entries, permission, access);
       });
-
-    if(cache) {
-      this._cache.set(permissions, access, objects, require, value);
+    } else {
+      return requestedPermissions.every((permission) => {
+        return this._weightPermissions(entries, permission, access);
+      });
     }
-
-    return value;
   }
 
-  private _weightPermissions(aclEntries: AclEntry[], permission: string, access?: AclAccess, objects?: (number | null)[]): boolean {
-    return aclEntries.some((aclEntry) => {
-      if (objects !== undefined && objects.indexOf(aclEntry.objectId) === -1) {
-        return false;
-      }
+  private _weightPermissions(
+    aclEntries: AclEntriesList,
+    permission: AclComplexPermission,
+    access?: AclAccess
+  ): boolean {
+    const permissions = aclEntries.get(permission.objectId);
 
-      return aclEntry.permissions
-        .some((aclPermission: AclPermission) => {
-          return (!permission || aclPermission.value === permission) && (aclPermission.access || 0) >= (access || 0);
-        });
-    });
+    if (!permissions) {
+      return false;
+    }
+
+    const permissionAccess = permissions.get(permission.permission);
+
+    return (permissionAccess || 0) >= (access || 0)
   }
 }

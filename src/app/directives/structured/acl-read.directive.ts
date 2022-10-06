@@ -3,6 +3,7 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { AclStructuredBaseDirective } from './acl-structured-base.directive';
 import { FsAcl } from '../../services/acl.service';
 import { AclRequire } from '../../enums/acl-require.enum';
+import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
 
 
 @Directive({
@@ -11,7 +12,7 @@ import { AclRequire } from '../../enums/acl-require.enum';
 export class AclReadDirective extends AclStructuredBaseDirective {
 
   @Input('fsAclRead')
-  set fsAclRead(value) {
+  set fsAclRead(value: string | (string | AclComplexPermission)[]) {
     this._requestedPermissions = Array.isArray(value) ? value : [value];
   }
 
@@ -33,7 +34,7 @@ export class AclReadDirective extends AclStructuredBaseDirective {
   @Input('fsAclReadRequire')
   protected _require = AclRequire.Any;
 
-  protected _requestedPermissions: string[];
+  protected _requestedPermissions: (string | AclComplexPermission)[];
 
   constructor(
     protected _tempalteRef: TemplateRef<null>,

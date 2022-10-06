@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { FsAcl } from '../../services/acl.service';
 import { AclRequire } from '../../enums/acl-require.enum';
+import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
 
 
  @Directive()
@@ -17,7 +18,7 @@ export abstract class AclAttributedBaseDirective implements OnChanges, OnDestroy
   protected _require = AclRequire.Any;
 
   protected _hasValidAccess = false;
-  protected _requestedPermissions: string[] = [];
+  protected _requestedPermissions: (string | AclComplexPermission)[] = [];
 
   protected _destroy$ = new Subject<void>();
 

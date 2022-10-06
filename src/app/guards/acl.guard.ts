@@ -11,7 +11,9 @@ import { FsAcl } from '../services/acl.service';
 import { AclRequire } from '../enums/acl-require.enum';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class FsAclGuard implements CanActivate, CanActivateChild {
 
   public constructor(private _aclQueryService: FsAcl, private _router: Router) {}

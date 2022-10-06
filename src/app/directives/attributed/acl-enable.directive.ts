@@ -9,6 +9,7 @@ import { NgControl } from '@angular/forms';
 import { FsAcl } from '../../services/acl.service';
 import { AclAttributedBaseDirective } from './acl-attributed-base.directive';
 import { AclRequire } from '../../enums';
+import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
 
 
 @Directive({
@@ -17,7 +18,7 @@ import { AclRequire } from '../../enums';
 export class AclEnableDirective extends AclAttributedBaseDirective implements OnDestroy {
 
   @Input('fsAclEnable')
-  set fsAclEnabled(value) {
+  set fsAclEnabled(value: string | (string | AclComplexPermission)[]) {
     this._requestedPermissions = Array.isArray(value) ? value : [value];
   }
 

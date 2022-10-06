@@ -28,7 +28,7 @@ const routes: Routes = [
   bootstrap: [ AppComponent ],
   imports: [
     BrowserModule,
-    FsAclModule.forRoot(),
+    FsAclModule,
     BrowserAnimationsModule,
     AppMaterialModule,
     FormsModule,

@@ -3,6 +3,7 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { AclStructuredBaseDirective } from './acl-structured-base.directive';
 import { FsAcl } from '../../services/acl.service';
 import { AclRequire } from '../../enums/acl-require.enum';
+import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
 
 
 @Directive({
@@ -11,7 +12,7 @@ import { AclRequire } from '../../enums/acl-require.enum';
 export class AclFullDirective extends AclStructuredBaseDirective {
 
   @Input('fsAclFull')
-  set fsAclFull(value) {
+  set fsAclFull(value: string | (string | AclComplexPermission)[]) {
     this._requestedPermissions = Array.isArray(value) ? value : [value];
   }
 
@@ -28,7 +29,7 @@ export class AclFullDirective extends AclStructuredBaseDirective {
   }
 
   @Input('fsAclFullObject')
-  set fsAclFullObject(value) {
+  set fsAclFullObject(value: number) {
     this._permissionObject = value;
   }
 
