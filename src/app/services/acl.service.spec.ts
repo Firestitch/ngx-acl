@@ -1,6 +1,7 @@
 import { async } from '@angular/core/testing';
 import { FsAcl } from './acl.service';
-import { AclAccess, AclRequire } from '@firestitch/acl';
+import { AclAccess } from '../enums/acl-access.enum';
+import { AclRequire } from '../enums/acl-require.enum';
 import { Permission } from '../../../playground/app/components/enums';
 
 describe('AclService', () => {

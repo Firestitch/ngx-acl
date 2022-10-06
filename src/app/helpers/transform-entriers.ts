@@ -1,4 +1,4 @@
-import { AclEntry } from '@firestitch/acl';
+import { AclEntry } from '../interfaces/acl-entry';
 import { AclEntriesList } from '../interfaces/acl-entris-list';
 
 export function transformEntriers(aclEntries: AclEntry[]): AclEntriesList {
