@@ -95,7 +95,7 @@ export class FsAcl {
     permission: AclComplexPermission,
     access?: AclAccess
   ): boolean {
-    const permissions = aclEntries.get(permission.objectId);
+    const permissions = aclEntries.get(permission.object);
 
     if (!permissions) {
       return false;
