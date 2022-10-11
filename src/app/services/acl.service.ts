@@ -41,15 +41,15 @@ export class FsAcl {
     this._entries.next(new Map());
   }
 
-  public hasRead(permissions: (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
+  public hasRead(permissions: string | (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
     return this.has(permissions, AclAccess.Read, object, require);
   }
 
-  public hasWrite(permissions: (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
+  public hasWrite(permissions: string | (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
     return this.has(permissions, AclAccess.Write, object, require);
   }
 
-  public hasFull(permissions: (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
+  public hasFull(permissions: string | (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
     return this.has(permissions, AclAccess.Full, object, require);
   }
 
