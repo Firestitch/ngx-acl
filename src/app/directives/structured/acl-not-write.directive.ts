@@ -7,7 +7,7 @@ import { FsAcl } from '../../services/acl.service';
 @Directive({
   selector: '[fsAclNotWrite]',
   inputs: [
-    'aclRequestedPermissions: fsAclNotWrite',
+    'AclPermissionParams: fsAclNotWrite',
     'aclThen: fsAclNotWriteThen',
     'aclElse: fsAclNotWriteElse',
     '_permissionObject: fsAclNotWriteObject',

@@ -11,7 +11,7 @@ import { AclAttributedBaseDirective } from './acl-attributed-base.directive';
 @Directive({
   selector: '[fsAclEditable]',
   inputs: [
-    'aclRequestedPermissions: fsAclEditable',
+    'AclPermissionParams: fsAclEditable',
     '_permissionObject: fsAclObject',
     '_require: fsAclRequire',
   ],

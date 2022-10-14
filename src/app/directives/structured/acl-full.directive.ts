@@ -7,7 +7,7 @@ import { FsAcl } from '../../services/acl.service';
 @Directive({
   selector: '[fsAclFull]',
   inputs: [
-    'aclRequestedPermissions: fsAclFull',
+    'AclPermissionParams: fsAclFull',
     'aclThen: fsAclFullThen',
     'aclElse: fsAclFullElse',
     '_permissionObject: fsAclFullObject',

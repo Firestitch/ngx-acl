@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FsAcl } from '../../services/acl.service';
-import { AclRequestedPermission } from '../../interfaces/acl-requested-permission';
+import { AclPermissionParam } from '../../interfaces/acl-permission-param';
 import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
 import { prepareRequestedPermissions } from '../../helpers/prepare-requested-permissions';
 import { AclRequire } from '../../enums/acl-require.enum';
@@ -26,7 +26,7 @@ export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy
   protected _permissionObject: number | number[] = null;
   protected _require: AclRequire = AclRequire.Any;
 
-  protected _requestedPermissions: AclRequestedPermission[] = [];
+  protected _requestedPermissions: AclPermissionParam = [];
 
   protected _thenTemplateRef: TemplateRef<any>;
   protected _elseTemplateRef: TemplateRef<any>;
@@ -45,7 +45,7 @@ export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy
     this._listenPermissionsChange();
   }
 
-  public set aclRequestedPermissions(value: AclDirectivePermissions) {
+  public set AclPermissionParams(value: AclDirectivePermissions) {
     this._requestedPermissions = prepareRequestedPermissions(value);
   }
 

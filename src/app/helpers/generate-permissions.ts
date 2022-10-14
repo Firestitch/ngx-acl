@@ -1,6 +1,6 @@
-import { AclComplexPermission } from '../interfaces/acl-complex-permission';
+import { AclObjectPermission } from '../interfaces/acl-object-permission';
 
-export function generatePermissions(permission: string, objects: number[]): AclComplexPermission[] {
+export function generatePermissions(permission: string, objects: number[]): AclObjectPermission[] {
 
   if (!objects) {
     return [{

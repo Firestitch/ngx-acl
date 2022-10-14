@@ -12,7 +12,7 @@ import { AclAttributedBaseDirective } from './acl-attributed-base.directive';
 @Directive({
   selector: '[fsAclEnable]',
   inputs: [
-    'aclRequestedPermissions: fsAclEnable',
+    'AclPermissionParams: fsAclEnable',
     '_permissionObject: fsAclObject',
     '_require: fsAclRequire',
   ],

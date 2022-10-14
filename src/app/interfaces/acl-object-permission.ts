@@ -1,4 +1,4 @@
-export interface AclComplexPermission {
+export interface AclObjectPermission {
   object: number;
   permission: string;
 }

@@ -4,12 +4,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AclEntry } from '../interfaces/acl-entry';
 import { AclAccess } from '../enums/acl-access.enum';
 import { AclRequire } from '../enums/acl-require.enum';
-// import { FsAclCache } from './acl-cache.service';
-import { AclComplexPermission } from '../interfaces/acl-complex-permission';
+import { AclObjectPermission } from '../interfaces/acl-object-permission';
 import { AclEntriesList } from '../interfaces/acl-entris-list';
 import { transformEntriers } from '../helpers/transform-entriers';
 import { generatePermissions } from '../helpers/generate-permissions';
-import { AclRequestedPermission } from '../interfaces/acl-requested-permission';
+import { AclPermissionParam } from '../interfaces/acl-permission-param';
 
 
 @Injectable({
@@ -18,10 +17,6 @@ import { AclRequestedPermission } from '../interfaces/acl-requested-permission';
 export class FsAcl {
 
   private _entries = new BehaviorSubject<AclEntriesList>(new Map());
-
-  public constructor(
-    // private _cache: FsAclCache,
-  ) {}
 
   public get entries$(): Observable<AclEntriesList> {
     return this._entries.asObservable();
@@ -32,9 +27,7 @@ export class FsAcl {
   }
 
   public setEntries(aclEntries: AclEntry[]) {
-    // this._cache.clear();
     const entries = transformEntriers(aclEntries);
-
     this._entries.next(entries);
   }
 
@@ -43,7 +36,7 @@ export class FsAcl {
   }
 
   public hasRead(
-    permissions: AclRequestedPermission[],
+    permissions: AclPermissionParam,
     object: number | number[] = null,
     require = AclRequire.Any,
   ): boolean {
@@ -51,7 +44,7 @@ export class FsAcl {
   }
 
   public hasWrite(
-    permissions: AclRequestedPermission[],
+    permissions: AclPermissionParam,
     object: number | number[] = null,
     require = AclRequire.Any,
   ): boolean {
@@ -59,7 +52,7 @@ export class FsAcl {
   }
 
   public hasFull(
-    permissions: AclRequestedPermission[],
+    permissions: AclPermissionParam,
     object: number | number[] = null,
     require = AclRequire.Any,
   ): boolean {
@@ -67,7 +60,7 @@ export class FsAcl {
   }
 
   public has(
-    permissions: AclRequestedPermission[],
+    permissions: AclPermissionParam,
     access?: AclAccess,
     objects?: number | number[],
     require = AclRequire.Any,
@@ -77,10 +70,13 @@ export class FsAcl {
       ? transformEntriers(aclEntries)
       : this.entries;
 
-    permissions = Array.isArray(permissions) ? permissions : [permissions];
+    if(!Array.isArray(permissions)) {
+      permissions = [permissions as any];  
+    }
+
     objects = typeof objects === 'number' ? [objects] : objects;
 
-    const requestedPermissions: AclComplexPermission[] = permissions
+    const requestedPermissions: AclObjectPermission[] = (permissions as any)
       .reduce((acc, permission) => {
         if (typeof permission === 'string') {
           acc.push(...generatePermissions(permission, objects as any));
@@ -90,8 +86,7 @@ export class FsAcl {
 
         return acc;
       }, []);
-
-
+      
     if (require === AclRequire.Any) {
       return requestedPermissions.some((permission) => {
         return this._weightPermissions(entries, permission, access);
@@ -105,7 +100,7 @@ export class FsAcl {
 
   private _weightPermissions(
     aclEntries: AclEntriesList,
-    permission: AclComplexPermission,
+    permission: AclObjectPermission,
     access?: AclAccess
   ): boolean {
     const permissions = aclEntries.get(permission.object);
