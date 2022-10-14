@@ -1,42 +1,39 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
-import { AclStructuredBaseDirective } from './acl-structured-base.directive';
+import { AclWriteDirective } from './acl-write.directive';
 import { FsAcl } from '../../services/acl.service';
 import { AclRequire } from '../../enums/acl-require.enum';
-import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
 import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
 import { prepareRequestedPermissions } from '../../helpers/prepare-requested-permissions';
 
 
 @Directive({
-  selector: '[fsAclRead]',
+  selector: '[fsAclNotWrite]',
 })
-export class AclReadDirective extends AclStructuredBaseDirective {
+export class AclNotWriteDirective extends AclWriteDirective {
 
-  @Input('fsAclRead')
-  set fsAclRead(value: AclDirectivePermissions) {
+  @Input('fsAclNotWrite')
+  set fsAclNotWrite(value: AclDirectivePermissions) {
     this._requestedPermissions = prepareRequestedPermissions(value);
   }
 
   @Input()
-  set fsAclReadThen(value: TemplateRef<any>) {
+  set fsAclNotWriteThen(value: TemplateRef<any>) {
     this._thenTemplateRef = value;
     this._thenViewRef = null;
   }
 
   @Input()
-  set fsAclReadElse(value: TemplateRef<any>) {
+  set fsAclNotWriteElse(value: TemplateRef<any>) {
     this._elseTemplateRef = value;
     this._elseViewRef = null;
   }
 
-  @Input('fsAclReadObject')
+  @Input('fsAclNotWriteObject')
   protected _permissionObject = null;
 
-  @Input('fsAclReadRequire')
+  @Input('fsAclNotWriteRequire')
   protected _require = AclRequire.Any;
-
-  protected _requestedPermissions: (string | AclComplexPermission)[];
 
   constructor(
     protected _tempalteRef: TemplateRef<null>,
@@ -47,10 +44,6 @@ export class AclReadDirective extends AclStructuredBaseDirective {
   }
 
   protected _checkPermissions() {
-    return this._aclQuery.hasRead(
-      this._requestedPermissions,
-      this._permissionObject,
-      this._require
-    );
+    return !super._checkPermissions();
   }
 }

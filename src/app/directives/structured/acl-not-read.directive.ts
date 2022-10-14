@@ -1,6 +1,6 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
-import { AclStructuredBaseDirective } from './acl-structured-base.directive';
+import { AclReadDirective } from './acl-read.directive';
 import { FsAcl } from '../../services/acl.service';
 import { AclRequire } from '../../enums/acl-require.enum';
 import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
@@ -9,31 +9,31 @@ import { prepareRequestedPermissions } from '../../helpers/prepare-requested-per
 
 
 @Directive({
-  selector: '[fsAclRead]',
+  selector: '[fsAclNotRead]',
 })
-export class AclReadDirective extends AclStructuredBaseDirective {
+export class AclNotReadDirective extends AclReadDirective {
 
-  @Input('fsAclRead')
-  set fsAclRead(value: AclDirectivePermissions) {
+  @Input('fsAclNotRead')
+  set fsAclNotRead(value: AclDirectivePermissions) {
     this._requestedPermissions = prepareRequestedPermissions(value);
   }
 
   @Input()
-  set fsAclReadThen(value: TemplateRef<any>) {
+  set fsAclNotReadThen(value: TemplateRef<any>) {
     this._thenTemplateRef = value;
     this._thenViewRef = null;
   }
 
   @Input()
-  set fsAclReadElse(value: TemplateRef<any>) {
+  set fsAclNotReadElse(value: TemplateRef<any>) {
     this._elseTemplateRef = value;
     this._elseViewRef = null;
   }
 
-  @Input('fsAclReadObject')
+  @Input('fsAclNotReadObject')
   protected _permissionObject = null;
 
-  @Input('fsAclReadRequire')
+  @Input('fsAclNotReadRequire')
   protected _require = AclRequire.Any;
 
   protected _requestedPermissions: (string | AclComplexPermission)[];
@@ -47,10 +47,6 @@ export class AclReadDirective extends AclStructuredBaseDirective {
   }
 
   protected _checkPermissions() {
-    return this._aclQuery.hasRead(
-      this._requestedPermissions,
-      this._permissionObject,
-      this._require
-    );
+    return !super._checkPermissions();
   }
 }

@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FsAcl } from '../../services/acl.service';
-import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
+import { AclRequestedPermission } from '../../interfaces/acl-requested-permission';
 
 
 @Directive()
@@ -14,7 +14,7 @@ export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy
 
   protected _permissionObject = null;
 
-  protected _requestedPermissions: (string | AclComplexPermission)[] = [];
+  protected _requestedPermissions: AclRequestedPermission[] = [];
 
   protected _thenTemplateRef: TemplateRef<any>;
   protected _elseTemplateRef: TemplateRef<any>;

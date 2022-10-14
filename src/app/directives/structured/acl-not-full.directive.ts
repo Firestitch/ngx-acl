@@ -1,42 +1,41 @@
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
-import { AclStructuredBaseDirective } from './acl-structured-base.directive';
+import { AclFullDirective } from './acl-full.directive';
 import { FsAcl } from '../../services/acl.service';
 import { AclRequire } from '../../enums/acl-require.enum';
-import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
 import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
 import { prepareRequestedPermissions } from '../../helpers/prepare-requested-permissions';
 
 
 @Directive({
-  selector: '[fsAclRead]',
+  selector: '[fsAclNotFull]',
 })
-export class AclReadDirective extends AclStructuredBaseDirective {
+export class AclNotFullDirective extends AclFullDirective {
 
-  @Input('fsAclRead')
-  set fsAclRead(value: AclDirectivePermissions) {
+  @Input('fsAclNotFull')
+  set fsAclNotFull(value: AclDirectivePermissions) {
     this._requestedPermissions = prepareRequestedPermissions(value);
   }
 
   @Input()
-  set fsAclReadThen(value: TemplateRef<any>) {
+  set fsAclNotFullThen(value: TemplateRef<any>) {
     this._thenTemplateRef = value;
     this._thenViewRef = null;
   }
 
   @Input()
-  set fsAclReadElse(value: TemplateRef<any>) {
+  set fsAclNotFullElse(value: TemplateRef<any>) {
     this._elseTemplateRef = value;
     this._elseViewRef = null;
   }
 
-  @Input('fsAclReadObject')
-  protected _permissionObject = null;
+  @Input('fsAclNotFullObject')
+  set fsAclNotFullObject(value: number) {
+    this._permissionObject = value;
+  }
 
-  @Input('fsAclReadRequire')
+  @Input('fsAclFullRequire')
   protected _require = AclRequire.Any;
-
-  protected _requestedPermissions: (string | AclComplexPermission)[];
 
   constructor(
     protected _tempalteRef: TemplateRef<null>,
@@ -47,10 +46,6 @@ export class AclReadDirective extends AclStructuredBaseDirective {
   }
 
   protected _checkPermissions() {
-    return this._aclQuery.hasRead(
-      this._requestedPermissions,
-      this._permissionObject,
-      this._require
-    );
+    return !super._checkPermissions();
   }
 }
