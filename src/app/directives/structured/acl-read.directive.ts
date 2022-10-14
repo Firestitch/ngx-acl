@@ -1,42 +1,20 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { AclStructuredBaseDirective } from './acl-structured-base.directive';
 import { FsAcl } from '../../services/acl.service';
-import { AclRequire } from '../../enums/acl-require.enum';
-import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
-import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
-import { prepareRequestedPermissions } from '../../helpers/prepare-requested-permissions';
 
 
 @Directive({
   selector: '[fsAclRead]',
+  inputs: [
+    'aclRequestedPermissions: fsAclRead',
+    'aclThen: fsAclReadThen',
+    'aclElse: fsAclReadElse',
+    '_permissionObject: fsAclReadObject',
+    '_require: fsAclReadRequire',
+  ],
 })
 export class AclReadDirective extends AclStructuredBaseDirective {
-
-  @Input('fsAclRead')
-  set fsAclRead(value: AclDirectivePermissions) {
-    this._requestedPermissions = prepareRequestedPermissions(value);
-  }
-
-  @Input()
-  set fsAclReadThen(value: TemplateRef<any>) {
-    this._thenTemplateRef = value;
-    this._thenViewRef = null;
-  }
-
-  @Input()
-  set fsAclReadElse(value: TemplateRef<any>) {
-    this._elseTemplateRef = value;
-    this._elseViewRef = null;
-  }
-
-  @Input('fsAclReadObject')
-  protected _permissionObject = null;
-
-  @Input('fsAclReadRequire')
-  protected _require = AclRequire.Any;
-
-  protected _requestedPermissions: (string | AclComplexPermission)[];
 
   constructor(
     protected _tempalteRef: TemplateRef<null>,

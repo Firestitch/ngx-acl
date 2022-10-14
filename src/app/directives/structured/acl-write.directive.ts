@@ -1,39 +1,20 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { AclStructuredBaseDirective } from './acl-structured-base.directive';
 import { FsAcl } from '../../services/acl.service';
-import { AclRequire } from '../../enums/acl-require.enum';
-import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
-import { prepareRequestedPermissions } from '../../helpers/prepare-requested-permissions';
 
 
 @Directive({
   selector: '[fsAclWrite]',
+  inputs: [
+    'aclRequestedPermissions: fsAclWrite',
+    'aclThen: fsAclWriteThen',
+    'aclElse: fsAclWriteElse',
+    '_permissionObject: fsAclWriteObject',
+    '_require: fsAclWriteRequire',
+  ],
 })
 export class AclWriteDirective extends AclStructuredBaseDirective {
-
-  @Input('fsAclWrite')
-  set fsAclWrite(value: AclDirectivePermissions) {
-    this._requestedPermissions = prepareRequestedPermissions(value);
-  }
-
-  @Input()
-  set fsAclWriteThen(value: TemplateRef<any>) {
-    this._thenTemplateRef = value;
-    this._thenViewRef = null;
-  }
-
-  @Input()
-  set fsAclWriteElse(value: TemplateRef<any>) {
-    this._elseTemplateRef = value;
-    this._elseViewRef = null;
-  }
-
-  @Input('fsAclWriteObject')
-  protected _permissionObject = null;
-
-  @Input('fsAclWriteRequire')
-  protected _require = AclRequire.Any;
 
   constructor(
     protected _tempalteRef: TemplateRef<null>,

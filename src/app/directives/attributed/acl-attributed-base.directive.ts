@@ -1,30 +1,34 @@
-import { Input, OnChanges, OnDestroy, SimpleChanges, Directive } from '@angular/core';
+import { OnChanges, OnDestroy, SimpleChanges, Directive } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FsAcl } from '../../services/acl.service';
 import { AclRequire } from '../../enums/acl-require.enum';
-import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
+import { AclRequestedPermission } from '../../interfaces/acl-requested-permission';
+import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
+import { prepareRequestedPermissions } from '../../helpers/prepare-requested-permissions';
 
 
- @Directive()
+@Directive()
 export abstract class AclAttributedBaseDirective implements OnChanges, OnDestroy {
 
-  @Input('aclObject')
-  protected _permissionObject;
-
-  @Input('aclRequire')
+  protected _permissionObject: number | number[];
   protected _require = AclRequire.Any;
-
   protected _hasValidAccess = false;
-  protected _requestedPermissions: (string | AclComplexPermission)[] = [];
+  protected _requestedPermissions: AclRequestedPermission[] = [];
 
   protected _destroy$ = new Subject<void>();
 
-  constructor(protected _aclQuery: FsAcl) {
+  protected constructor(protected _aclQuery: FsAcl) {
     this._listenPermissionsChange();
   }
+
+  public set aclRequestedPermissions(value: AclDirectivePermissions) {
+    this._requestedPermissions = prepareRequestedPermissions(value);
+  }
+
+  protected abstract _checkPermissions(): void;
 
   public ngOnChanges(changes: SimpleChanges): void {
     this._checkPermissions();
@@ -35,8 +39,6 @@ export abstract class AclAttributedBaseDirective implements OnChanges, OnDestroy
     this._destroy$.complete();
   }
 
-  protected abstract _checkPermissions();
-
   protected _listenPermissionsChange() {
     this._aclQuery.entries$
       .pipe(
@@ -45,5 +47,13 @@ export abstract class AclAttributedBaseDirective implements OnChanges, OnDestroy
       .subscribe(() => {
         this._checkPermissions();
       });
+  }
+
+  protected _checkAclPermissions(): boolean {
+    return this._aclQuery.hasWrite(
+      this._requestedPermissions,
+      this._permissionObject,
+      this._require
+    );
   }
 }

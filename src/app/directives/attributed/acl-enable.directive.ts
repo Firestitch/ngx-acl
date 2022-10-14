@@ -1,6 +1,5 @@
 import {
   Directive,
-  Input,
   Optional,
   OnDestroy,
 } from '@angular/core';
@@ -8,27 +7,17 @@ import { NgControl } from '@angular/forms';
 
 import { FsAcl } from '../../services/acl.service';
 import { AclAttributedBaseDirective } from './acl-attributed-base.directive';
-import { AclRequire } from '../../enums';
-import { AclComplexPermission } from '../../interfaces/acl-complex-permission';
 
 
 @Directive({
-  selector: '[fsAclEnable]'
+  selector: '[fsAclEnable]',
+  inputs: [
+    'aclRequestedPermissions: fsAclEnable',
+    '_permissionObject: fsAclObject',
+    '_require: fsAclRequire',
+  ],
 })
 export class AclEnableDirective extends AclAttributedBaseDirective implements OnDestroy {
-
-  @Input('fsAclEnable')
-  set fsAclEnabled(value: string | (string | AclComplexPermission)[]) {
-    this._requestedPermissions = Array.isArray(value) ? value : [value];
-  }
-
-  @Input('fsAclObject')
-  set fsAclEnabledObject(value) {
-    this._permissionObject = value;
-  }
-
-  @Input('fsAclRequire')
-  protected _require = AclRequire.Any;
 
   constructor(
     protected _aclQuery: FsAcl,
@@ -37,12 +26,8 @@ export class AclEnableDirective extends AclAttributedBaseDirective implements On
     super(_aclQuery);
   }
 
-  protected _checkPermissions() {
-    const valid = this._aclQuery.hasWrite(
-      this._requestedPermissions,
-      this._permissionObject,
-      this._require
-    );
+  protected _checkPermissions(): void {
+    const valid = super._checkAclPermissions();
 
     setTimeout(() => {
       if (this._ngControl && this._ngControl.control) {

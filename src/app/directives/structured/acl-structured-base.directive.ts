@@ -1,10 +1,21 @@
-import { EmbeddedViewRef, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewContainerRef, Directive } from '@angular/core';
+import {
+  EmbeddedViewRef,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  TemplateRef,
+  ViewContainerRef,
+  Directive,
+} from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FsAcl } from '../../services/acl.service';
 import { AclRequestedPermission } from '../../interfaces/acl-requested-permission';
+import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
+import { prepareRequestedPermissions } from '../../helpers/prepare-requested-permissions';
+import { AclRequire } from '../../enums/acl-require.enum';
 
 
 @Directive()
@@ -12,7 +23,8 @@ export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy
 
   protected abstract _checkPermissions(): boolean;
 
-  protected _permissionObject = null;
+  protected _permissionObject: number | number[] = null;
+  protected _require: AclRequire = AclRequire.Any;
 
   protected _requestedPermissions: AclRequestedPermission[] = [];
 
@@ -24,13 +36,27 @@ export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy
 
   protected _destroy$ = new Subject<void>();
 
-  constructor(
+  protected constructor(
     protected _tempalteRef: TemplateRef<null>,
     protected _viewContainerRef: ViewContainerRef,
     protected _aclQuery: FsAcl
   ) {
     this._thenTemplateRef = _tempalteRef;
     this._listenPermissionsChange();
+  }
+
+  public set aclRequestedPermissions(value: AclDirectivePermissions) {
+    this._requestedPermissions = prepareRequestedPermissions(value);
+  }
+
+  public set aclThen(value: TemplateRef<any>) {
+    this._thenTemplateRef = value;
+    this._thenViewRef = null;
+  }
+
+  public set aclElse(value: TemplateRef<any>) {
+    this._elseTemplateRef = value;
+    this._elseViewRef = null;
   }
 
   public ngOnChanges(changes: SimpleChanges): void {

@@ -9,6 +9,7 @@ import { AclComplexPermission } from '../interfaces/acl-complex-permission';
 import { AclEntriesList } from '../interfaces/acl-entris-list';
 import { transformEntriers } from '../helpers/transform-entriers';
 import { generatePermissions } from '../helpers/generate-permissions';
+import { AclRequestedPermission } from '../interfaces/acl-requested-permission';
 
 
 @Injectable({
@@ -41,25 +42,37 @@ export class FsAcl {
     this._entries.next(new Map());
   }
 
-  public hasRead(permissions: string | (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
+  public hasRead(
+    permissions: AclRequestedPermission[],
+    object: number | number[] = null,
+    require = AclRequire.Any,
+  ): boolean {
     return this.has(permissions, AclAccess.Read, object, require);
   }
 
-  public hasWrite(permissions: string | (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
+  public hasWrite(
+    permissions: AclRequestedPermission[],
+    object: number | number[] = null,
+    require = AclRequire.Any,
+  ): boolean {
     return this.has(permissions, AclAccess.Write, object, require);
   }
 
-  public hasFull(permissions: string | (string | AclComplexPermission)[], object = null, require = AclRequire.Any) {
+  public hasFull(
+    permissions: AclRequestedPermission[],
+    object: number | number[] = null,
+    require = AclRequire.Any,
+  ): boolean {
     return this.has(permissions, AclAccess.Full, object, require);
   }
 
   public has(
-    permissions: string | (string | AclComplexPermission)[],
+    permissions: AclRequestedPermission[],
     access?: AclAccess,
     objects?: number | number[],
     require = AclRequire.Any,
     aclEntries?: AclEntry[],
-  ) {
+  ): boolean {
     const entries = !!aclEntries
       ? transformEntriers(aclEntries)
       : this.entries;
