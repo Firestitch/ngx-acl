@@ -2,7 +2,7 @@
   "name": "@firestitch/acl",
   "title": "ACL",
   "description": "ACL",
-  "version": "12.5.1",
+  "version": "12.5.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-acl"
