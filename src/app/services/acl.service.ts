@@ -70,8 +70,12 @@ export class FsAcl {
       ? transformEntriers(aclEntries)
       : this.entries;
 
-    if(!Array.isArray(permissions)) {
-      permissions = [permissions as any];  
+    if (permissions && !Array.isArray(permissions)) {
+      permissions = [permissions as any];
+    }
+
+    if ((permissions as unknown[]).length === 0) {
+      return true;
     }
 
     objects = typeof objects === 'number' ? [objects] : objects;
@@ -81,12 +85,16 @@ export class FsAcl {
         if (typeof permission === 'string') {
           acc.push(...generatePermissions(permission, objects as any));
         } else {
+          if (permission.object === undefined) {
+            permission.object = null;
+          }
+
           acc.push(permission);
         }
 
         return acc;
       }, []);
-      
+
     if (require === AclRequire.Any) {
       return requestedPermissions.some((permission) => {
         return this._weightPermissions(entries, permission, access);

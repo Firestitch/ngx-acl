@@ -140,3 +140,62 @@
     <span class="invalid"></span>
   </ng-template>
 </div>
+
+<h2 class="mt0">Multiple Object Permissions</h2>
+
+<div class="row">
+  Write Access to global projects OR Project Approval with object ID {{ validProject.id }}
+
+  <span *fsAclWrite="[
+    Permission.Project,
+    { permission: Permission.ProjectApproval, object: validProject.id }
+  ]; else invalidFullGlobal">
+    <span class="valid"></span>
+  </span>
+
+  <ng-template #invalidFullGlobal>
+    <span class="invalid"></span>
+  </ng-template>
+
+</div>
+
+<h2 class="mt0">Not Directives </h2>
+
+<div class="row">
+  Not Have Full Access to global projects
+
+  <span *fsAclNotFull="Permission.Project; else invalidFullGlobal">
+    <span class="valid"></span>
+  </span>
+
+  <ng-template #invalidFullGlobal>
+    <span class="invalid"></span>
+  </ng-template>
+
+</div>
+
+<div class="row">
+  Not Have Write Access to global projects
+
+  <span *fsAclNotWrite="Permission.Project; else invalidFullGlobal">
+    <span class="valid"></span>
+  </span>
+
+  <ng-template #invalidFullGlobal>
+    <span class="invalid"></span>
+  </ng-template>
+
+</div>
+
+<div class="row">
+  Not Have Read Access to global projects
+
+  <span *fsAclNotRead="Permission.Project; else invalidFullGlobal">
+    <span class="valid"></span>
+  </span>
+
+  <ng-template #invalidFullGlobal>
+    <span class="invalid"></span>
+  </ng-template>
+
+</div>
