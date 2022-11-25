@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { AclAccesses } from '@firestitch/acl';
+import { Component, OnInit } from '@angular/core';
+
+import { AclAccesses, FsAcl } from '@firestitch/acl';
+
 import { Permission } from '../enums/permission';
 
 
@@ -8,12 +10,19 @@ import { Permission } from '../enums/permission';
   templateUrl: 'kitchen-sink.component.html',
   styleUrls: ['kitchen-sink.component.scss'],
 })
-export class KitchenSinkComponent {
+export class KitchenSinkComponent implements OnInit {
 
   public Permission = Permission;
   public Accesses = AclAccesses;
   public validProject = { id: 555 };
   public invalidProject = { id: 999 };
 
+  public constructor(
+    private _acl: FsAcl,
+  ) {}
+
+  public ngOnInit(): void {
+    
+  }
 
 }

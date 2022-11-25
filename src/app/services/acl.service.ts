@@ -105,6 +105,17 @@ export class FsAcl {
       });
     }
   }
+  
+  public hasPermission(permission: string|string[]): boolean {
+    const permissions = typeof permission === 'string' ? Array(permission) : permission;
+    return Array.from(this.entries)
+    .some((entry) => {      
+      return Array.from(entry[1])
+        .some((item) => {
+          return permissions.indexOf(item[0]) !== -1;
+        });
+    });
+  }
 
   private _weightPermissions(
     aclEntries: AclEntriesList,
