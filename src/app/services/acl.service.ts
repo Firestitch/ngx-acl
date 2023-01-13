@@ -97,11 +97,11 @@ export class FsAcl {
 
     if (require === AclRequire.Any) {
       return requestedPermissions.some((permission) => {
-        return this._weightPermissions(entries, permission, access);
+        return this._weightPermissions(entries, permission, permission.access || access);
       });
     } else {
       return requestedPermissions.every((permission) => {
-        return this._weightPermissions(entries, permission, access);
+        return this._weightPermissions(entries, permission, permission.access || access);
       });
     }
   }
