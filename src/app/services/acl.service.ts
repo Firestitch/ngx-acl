@@ -130,6 +130,6 @@ export class FsAcl {
 
     const permissionAccess = permissions.get(permission.permission);
 
-    return (permissionAccess || 0) >= (access || 0)
+    return (permissionAccess || 0) >= (access || AclAccess.Read)
   }
 }
