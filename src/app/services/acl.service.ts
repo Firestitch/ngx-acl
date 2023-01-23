@@ -9,6 +9,7 @@ import { AclEntriesList } from '../interfaces/acl-entris-list';
 import { transformEntriers } from '../helpers/transform-entriers';
 import { generatePermissions } from '../helpers/generate-permissions';
 import { AclPermissionParam } from '../interfaces/acl-permission-param';
+import { validatePermissionObject } from '../helpers/validate-permission-object';
 
 
 @Injectable({
@@ -87,6 +88,8 @@ export class FsAcl {
         } else {
           if (permission.object === undefined) {
             permission.object = null;
+          } else {
+            validatePermissionObject(permission.object, permission);
           }
 
           acc.push(permission);
@@ -105,11 +108,11 @@ export class FsAcl {
       });
     }
   }
-  
+
   public hasPermission(permission: string|string[]): boolean {
     const permissions = typeof permission === 'string' ? Array(permission) : permission;
     return Array.from(this.entries)
-    .some((entry) => {      
+    .some((entry) => {
       return Array.from(entry[1])
         .some((item) => {
           return permissions.indexOf(item[0]) !== -1;

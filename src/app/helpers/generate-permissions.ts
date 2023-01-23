@@ -1,4 +1,5 @@
 import { AclObjectPermission } from '../interfaces/acl-object-permission';
+import { validatePermissionObject } from './validate-permission-object';
 
 export function generatePermissions(permission: string, objects: number[]): AclObjectPermission[] {
 
@@ -10,6 +11,8 @@ export function generatePermissions(permission: string, objects: number[]): AclO
   }
 
   return objects.reduce((acc, object) => {
+    validatePermissionObject(object, permission);
+
     acc.push({
       permission: permission,
       object: object,
