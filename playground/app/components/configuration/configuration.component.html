@@ -10,7 +10,7 @@
         <mat-select
             [(ngModel)]="entry.permission"
             (ngModelChange)="change()"
-            name="permission_{{permissionIndex}}">
+            [name]="'permission' + entryIndex">
           <mat-option
             *ngFor="let item of Permissions"
             [value]="item.value">
@@ -24,7 +24,7 @@
         <mat-select
             [(ngModel)]="entry.access"
             (ngModelChange)="change()"
-            name="access_{{index}}">
+            [name]="'access' + entryIndex">
           <mat-option
             *ngFor="let item of Accesses"
             [value]="item.value">
