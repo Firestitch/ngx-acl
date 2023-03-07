@@ -42,6 +42,7 @@
     "@angular/router": "^12.2.15",
     "@compodoc/compodoc": "^1.1.11",
     "@firestitch/common": "^12.0.0",
+    "@firestitch/component-tools": "^12.0.8",
     "@firestitch/drawer": "^12.0.0",
     "@firestitch/example": "^12.0.0",
     "@firestitch/iframe": "^12.0.0",
@@ -72,8 +73,7 @@
     "tslib": "^2.0.0",
     "tslint": "~6.1.0",
     "typescript": "^4.3.5",
-    "zone.js": "~0.11.4",
-    "@firestitch/component-tools": "^12.0.6"
+    "zone.js": "~0.11.4"
   },
   "engines": {
     "node": ">=6.0.0"
