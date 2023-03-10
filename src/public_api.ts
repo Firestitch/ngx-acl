@@ -15,4 +15,3 @@ export { AclWriteDirective } from './app/directives/structured/acl-write.directi
 export { AclFullDirective } from './app/directives/structured/acl-full.directive';
 export { AclDisableDirective } from './app/directives/attributed/acl-disable.directive';
 export { AclEnableDirective } from './app/directives/attributed/acl-enable.directive';
-export { AclEditableDirective } from './app/directives/attributed/acl-editable.directive';

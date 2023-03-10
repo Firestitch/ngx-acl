@@ -22,16 +22,4 @@
       placeholder="Disabled">
       <mat-hint>Disabled if does not have write Access to object ID 555 with Project and Project Approval Permissions</mat-hint>
   </mat-form-field>
-
-  <mat-form-field>
-    <input
-      matInput
-      [fsAclEditable]="[Permission.Project,Permission.ProjectApproval]"
-      [fsAclRequire]="AclRequire.All"
-      [fsAclObject]="555"
-      [(ngModel)]="editable"
-      name="editable"
-      placeholder="Editable">
-      <mat-hint>Enabled if has write Access to object ID 555 with Project and Project Approval Permissions</mat-hint>
-  </mat-form-field>
 </form>
