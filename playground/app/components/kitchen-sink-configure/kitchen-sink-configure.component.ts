@@ -12,8 +12,10 @@ export class KitchenSinkConfigureComponent {
   public config;
   public example: ExampleService;
 
-  constructor(public drawer: DrawerRef<KitchenSinkConfigureComponent>,
-              @Inject(DRAWER_DATA) public data) {
+  constructor(
+    public drawer: DrawerRef<KitchenSinkConfigureComponent>,
+    @Inject(DRAWER_DATA) public data
+  ) {
     this.config = data.config;
     this.example = data.example;
   }

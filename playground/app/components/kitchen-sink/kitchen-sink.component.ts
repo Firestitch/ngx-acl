@@ -7,8 +7,8 @@ import { Permission } from '../enums/permission';
 
 @Component({
   selector: 'kitchen-sink',
-  templateUrl: 'kitchen-sink.component.html',
-  styleUrls: ['kitchen-sink.component.scss'],
+  templateUrl: './kitchen-sink.component.html',
+  styleUrls: ['./kitchen-sink.component.scss'],
 })
 export class KitchenSinkComponent implements OnInit {
 
@@ -22,7 +22,6 @@ export class KitchenSinkComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    
   }
 
 }

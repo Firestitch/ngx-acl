@@ -5,7 +5,7 @@ import { AclEntry } from '../interfaces/acl-entry';
 import { AclAccess } from '../enums/acl-access.enum';
 import { AclRequire } from '../enums/acl-require.enum';
 import { AclObjectPermission } from '../interfaces/acl-object-permission';
-import { AclEntriesList } from '../interfaces/acl-entris-list';
+import { AclEntriesList, AclPermissionAccessMap } from '../interfaces/acl-entris-list';
 import { transformEntriers } from '../helpers/transform-entriers';
 import { generatePermissions } from '../helpers/generate-permissions';
 import { AclPermissionParam } from '../interfaces/acl-permission-param';
@@ -61,7 +61,7 @@ export class FsAcl {
   }
 
   public has(
-    permissions: AclPermissionParam,
+    permissionParam: AclPermissionParam,
     access?: AclAccess,
     objects?: number | number[],
     require = AclRequire.Any,
@@ -71,40 +71,19 @@ export class FsAcl {
       ? transformEntriers(aclEntries)
       : this.entries;
 
-    if (permissions && !Array.isArray(permissions)) {
-      permissions = [permissions as any];
-    }
+    const aclObjectPermissions = this._permissionParamAclObjectPermissions(permissionParam, objects);
 
-    if ((permissions as unknown[]).length === 0) {
+    if (aclObjectPermissions.length === 0) {
       return true;
     }
 
-    objects = typeof objects === 'number' ? [objects] : objects;
-
-    const requestedPermissions: AclObjectPermission[] = (permissions as any)
-      .reduce((acc, permission) => {
-        if (typeof permission === 'string') {
-          acc.push(...generatePermissions(permission, objects as any));
-        } else {
-          if (permission.object === undefined) {
-            permission.object = null;
-          } else {
-            validatePermissionObject(permission.object, permission);
-          }
-
-          acc.push(permission);
-        }
-
-        return acc;
-      }, []);
-
     if (require === AclRequire.Any) {
-      return requestedPermissions.some((permission) => {
-        return this._weightPermissions(entries, permission, permission.access || access);
+      return aclObjectPermissions.some((aclObjectPermission) => {
+        return this._weightPermissions(entries, aclObjectPermission, aclObjectPermission.access || access);
       });
     } else {
-      return requestedPermissions.every((permission) => {
-        return this._weightPermissions(entries, permission, permission.access || access);
+      return aclObjectPermissions.every((aclObjectPermission) => {
+        return this._weightPermissions(entries, aclObjectPermission, aclObjectPermission.access || access);
       });
     }
   }
@@ -120,19 +99,57 @@ export class FsAcl {
     });
   }
 
+  private _permissionParamAclObjectPermissions(permissionParam: AclPermissionParam, objects?: number[] | number): AclObjectPermission[] {
+    let aclPermissionParams: AclObjectPermission[] = (permissionParam as any) || [];
+
+    if (!Array.isArray(permissionParam)) {
+      aclPermissionParams = [permissionParam as any];
+    }
+
+    const aclObjectPermissions = aclPermissionParams
+      .reduce((acc: AclObjectPermission[], aclObjectPermission: any) => {
+        if (typeof aclObjectPermission === 'string') {
+          acc.push(...generatePermissions(aclObjectPermission, objects as number));
+        } else {
+          validatePermissionObject(aclObjectPermission.object, aclObjectPermission);
+
+          acc.push(aclObjectPermission);
+        }
+
+        return acc;
+      }, []);
+
+    return aclObjectPermissions;
+  }
+
   private _weightPermissions(
     aclEntries: AclEntriesList,
     permission: AclObjectPermission,
     access?: AclAccess
   ): boolean {
-    const permissions = aclEntries.get(permission.object);
+    if(permission.object === undefined) {
+      const exists = Array.from(aclEntries.values())
+        .some((aclPermissionAccessMap: AclPermissionAccessMap) => {
+          return this._hasAclPermissionAccess(aclPermissionAccessMap, permission.permission, access);
+        });
 
-    if (!permissions) {
-      return false;
+      return exists;
     }
 
-    const permissionAccess = permissions.get(permission.permission);
+    const aclPermissionAccessMap = aclEntries.get(permission.object);
 
+    if (!aclPermissionAccessMap) {
+      return false;
+    }
+    
+    return this._hasAclPermissionAccess(aclPermissionAccessMap, permission.permission, access);
+  }
+
+  private _hasAclPermissionAccess(aclPermissionAccessMap: AclPermissionAccessMap, permission: string, access: AclAccess): boolean {
+    return this._hasAccess(aclPermissionAccessMap.get(permission), access);
+  }
+
+  private _hasAccess(permissionAccess: number, access: AclAccess): boolean {
     return (permissionAccess || 0) >= (access || AclAccess.Read)
   }
 }

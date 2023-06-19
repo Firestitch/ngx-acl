@@ -1,14 +1,15 @@
 import { AclObjectPermission } from '../interfaces/acl-object-permission';
 import { validatePermissionObject } from './validate-permission-object';
 
-export function generatePermissions(permission: string, objects: number[]): AclObjectPermission[] {
-
-  if (!objects) {
+export function generatePermissions(permission: string, object: number | number[]): AclObjectPermission[] {
+  if (object === null || object === undefined) {
     return [{
       permission: permission,
-      object: null,
+      object: object as number,
     }];
   }
+
+  const objects = typeof object === 'number' ? [object] : object;
 
   return objects.reduce((acc, object) => {
     validatePermissionObject(object, permission);
