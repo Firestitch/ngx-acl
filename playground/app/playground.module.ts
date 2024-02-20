@@ -24,29 +24,26 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  bootstrap: [AppComponent],
-  imports: [
-    BrowserModule,
-    FsAclModule,
-    BrowserAnimationsModule,
-    AppMaterialModule,
-    FormsModule,
-    FsLabelModule,
-    FsExampleModule.forRoot(),
-    FsMessageModule.forRoot(),
-    RouterModule.forRoot(routes),
-  ],
-  entryComponents: [
-    KitchenSinkConfigureComponent
-  ],
-  declarations: [
-    AppComponent,
-    ExamplesComponent,
-    KitchenSinkComponent,
-    KitchenSinkConfigureComponent,
-    ConfigurationComponent,
-    AttributeComponent
-  ],
+    bootstrap: [AppComponent],
+    imports: [
+        BrowserModule,
+        FsAclModule,
+        BrowserAnimationsModule,
+        AppMaterialModule,
+        FormsModule,
+        FsLabelModule,
+        FsExampleModule.forRoot(),
+        FsMessageModule.forRoot(),
+        RouterModule.forRoot(routes),
+    ],
+    declarations: [
+        AppComponent,
+        ExamplesComponent,
+        KitchenSinkComponent,
+        KitchenSinkConfigureComponent,
+        ConfigurationComponent,
+        AttributeComponent
+    ]
 })
 export class PlaygroundModule {
 }
