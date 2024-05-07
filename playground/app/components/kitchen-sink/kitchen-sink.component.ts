@@ -23,11 +23,7 @@ export class KitchenSinkComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    const x  = this._acl.has([{
-      object: 555,
-    }]);
 
-    debugger;
   }
 
 }
