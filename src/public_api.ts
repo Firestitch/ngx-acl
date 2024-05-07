@@ -12,6 +12,7 @@ export { AclPermissionParam } from './app/interfaces/acl-permission-param';
 
 export { AclDisableDirective } from './app/directives/attributed/acl-disable.directive';
 export { AclEnableDirective } from './app/directives/attributed/acl-enable.directive';
+export { AclHasDirective } from './app/directives/structured';
 export { AclFullDirective } from './app/directives/structured/acl-full.directive';
 export { AclNotFullDirective } from './app/directives/structured/acl-not-full.directive';
 export { AclNotReadDirective } from './app/directives/structured/acl-not-read.directive';

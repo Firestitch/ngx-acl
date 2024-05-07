@@ -5,16 +5,16 @@ import { AclStructuredBaseDirective } from './acl-structured-base.directive';
 
 
 @Directive({
-  selector: '[fsAclWrite]',
+  selector: '[fsAclHas]',
   inputs: [
-    'AclPermissionParams: fsAclWrite',
-    'aclThen: fsAclWriteThen',
-    'aclElse: fsAclWriteElse',
-    '_permissionObject: fsAclWriteObject',
-    '_require: fsAclWriteRequire',
+    'AclPermissionParams: fsAclHas',
+    'aclThen: fsAclHasThen',
+    'aclElse: fsAclHasElse',
+    '_permissionObject: fsAclHasObject',
+    '_require: fsAclHasRequire',
   ],
 })
-export class AclWriteDirective extends AclStructuredBaseDirective {
+export class AclHasDirective extends AclStructuredBaseDirective {
 
   constructor(
     protected _tempalteRef: TemplateRef<null>,
@@ -25,10 +25,8 @@ export class AclWriteDirective extends AclStructuredBaseDirective {
   }
 
   protected _checkPermissions() {
-    return this._aclQuery.hasWrite(
+    return this._aclQuery.has(
       this._requestedPermissions,
-      this._permissionObject,
-      this._require
     );
   }
 }

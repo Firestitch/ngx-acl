@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 
-import { AclReadDirective } from './directives/structured/acl-read.directive';
-import { AclWriteDirective } from './directives/structured/acl-write.directive';
-import { AclFullDirective } from './directives/structured/acl-full.directive';
 import { AclDisableDirective } from './directives/attributed/acl-disable.directive';
 import { AclEnableDirective } from './directives/attributed/acl-enable.directive';
+import { AclHasDirective } from './directives/structured';
+import { AclFullDirective } from './directives/structured/acl-full.directive';
+import { AclNotFullDirective } from './directives/structured/acl-not-full.directive';
 import { AclNotReadDirective } from './directives/structured/acl-not-read.directive';
 import { AclNotWriteDirective } from './directives/structured/acl-not-write.directive';
-import { AclNotFullDirective } from './directives/structured/acl-not-full.directive';
+import { AclReadDirective } from './directives/structured/acl-read.directive';
+import { AclWriteDirective } from './directives/structured/acl-write.directive';
 
 
 @NgModule({
-  imports: [],
   declarations: [
     AclReadDirective,
     AclWriteDirective,
@@ -21,6 +21,7 @@ import { AclNotFullDirective } from './directives/structured/acl-not-full.direct
     AclNotFullDirective,
     AclDisableDirective,
     AclEnableDirective,
+    AclHasDirective,
   ],
   exports: [
     AclReadDirective,
@@ -31,6 +32,7 @@ import { AclNotFullDirective } from './directives/structured/acl-not-full.direct
     AclNotFullDirective,
     AclDisableDirective,
     AclEnableDirective,
+    AclHasDirective,
   ]
 })
 export class FsAclModule {}
