@@ -1,7 +1,7 @@
 import { AclAccess } from "../enums";
 
 export interface AclObjectPermission {
-  permission: string;
+  permission?: string;
   object?: number;
   access?: AclAccess;
 }

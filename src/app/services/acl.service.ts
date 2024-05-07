@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { AclEntry } from '../interfaces/acl-entry';
 import { AclAccess } from '../enums/acl-access.enum';
 import { AclRequire } from '../enums/acl-require.enum';
-import { AclObjectPermission } from '../interfaces/acl-object-permission';
-import { AclEntriesList, AclPermissionAccessMap } from '../interfaces/acl-entris-list';
-import { transformEntriers } from '../helpers/transform-entriers';
 import { generatePermissions } from '../helpers/generate-permissions';
-import { AclPermissionParam } from '../interfaces/acl-permission-param';
+import { transformEntriers } from '../helpers/transform-entriers';
 import { validatePermissionObject } from '../helpers/validate-permission-object';
+import { AclEntriesList, AclPermissionAccessMap } from '../interfaces/acl-entris-list';
+import { AclEntry } from '../interfaces/acl-entry';
+import { AclObjectPermission } from '../interfaces/acl-object-permission';
+import { AclPermissionParam } from '../interfaces/acl-permission-param';
 
 
 @Injectable({
@@ -140,6 +140,10 @@ export class FsAcl {
 
     if (!aclPermissionAccessMap) {
       return false;
+    }
+
+    if(!permission.permission) {
+      return true;
     }
     
     return this._hasAclPermissionAccess(aclPermissionAccessMap, permission.permission, access);

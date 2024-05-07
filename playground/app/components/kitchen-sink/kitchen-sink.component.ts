@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { AclAccesses, FsAcl } from '@firestitch/acl';
 
@@ -9,6 +9,7 @@ import { Permission } from '../enums/permission';
   selector: 'kitchen-sink',
   templateUrl: './kitchen-sink.component.html',
   styleUrls: ['./kitchen-sink.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KitchenSinkComponent implements OnInit {
 
@@ -22,6 +23,11 @@ export class KitchenSinkComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    const x  = this._acl.has([{
+      object: 555,
+    }]);
+
+    debugger;
   }
 
 }
