@@ -191,5 +191,17 @@
 <h2 class="mt0">Pipes</h2>
 
 <ng-container *ngIf="[{ permission: Permission.Project }] | fsAclHas">
-  Has Project Permission
+  <p>Has Project permission</p>
+</ng-container>
+
+<ng-container *ngIf="[{ permission: Permission.Project }] | fsAclRead">
+  <p>Has read Project permission</p>
+</ng-container>
+
+<ng-container *ngIf="[{ permission: Permission.Project }] | fsAclWrite">
+  <p>Has write Project permission</p>
+</ng-container>
+
+<ng-container *ngIf="[{ permission: Permission.Project }] | fsAclFull">
+  <p>Has full Project permission</p>
 </ng-container>
