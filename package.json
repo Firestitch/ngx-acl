@@ -2,7 +2,7 @@
   "name": "@firestitch/acl",
   "title": "ACL",
   "description": "ACL",
-  "version": "13.0.2",
+  "version": "13.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-acl"
@@ -48,7 +48,7 @@
     "@firestitch/file": "^12.18.6",
     "@firestitch/iframe": "^12.0.7",
     "@firestitch/label": "^12.0.0",
-    "@firestitch/lint": "^12.0.18",
+    "@firestitch/lint": "^14.0.11",
     "@firestitch/menu": "^12.0.1",
     "@firestitch/message": "^12.3.1",
     "@firestitch/store": "^12.0.0",

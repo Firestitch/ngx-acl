@@ -1,21 +1,21 @@
 import {
+  Directive,
   EmbeddedViewRef,
   OnChanges,
   OnDestroy,
   SimpleChanges,
   TemplateRef,
   ViewContainerRef,
-  Directive,
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { FsAcl } from '../../services/acl.service';
-import { AclPermissionParam } from '../../interfaces/acl-permission-param';
-import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
-import { prepareRequestedPermissions } from '../../helpers/prepare-requested-permissions';
 import { AclRequire } from '../../enums/acl-require.enum';
+import { prepareRequestedPermissions } from '../../helpers/prepare-requested-permissions';
+import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
+import { AclPermissionParam } from '../../interfaces/acl-permission-param';
+import { FsAcl } from '../../services/acl.service';
 
 
 @Directive()
@@ -80,7 +80,6 @@ export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy
   }
 
   protected _updateView() {
-
     if (this._checkPermissions()) {
       if (!this._thenViewRef) {
         this._clear();

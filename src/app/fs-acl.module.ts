@@ -9,6 +9,7 @@ import { AclNotReadDirective } from './directives/structured/acl-not-read.direct
 import { AclNotWriteDirective } from './directives/structured/acl-not-write.directive';
 import { AclReadDirective } from './directives/structured/acl-read.directive';
 import { AclWriteDirective } from './directives/structured/acl-write.directive';
+import { FsAclHasPipe } from './pipes';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { AclWriteDirective } from './directives/structured/acl-write.directive';
     AclDisableDirective,
     AclEnableDirective,
     AclHasDirective,
+    FsAclHasPipe,
   ],
   exports: [
     AclReadDirective,
@@ -33,6 +35,7 @@ import { AclWriteDirective } from './directives/structured/acl-write.directive';
     AclDisableDirective,
     AclEnableDirective,
     AclHasDirective,
+    FsAclHasPipe,
   ]
 })
 export class FsAclModule {}

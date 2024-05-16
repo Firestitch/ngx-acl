@@ -187,3 +187,9 @@
     <span class="invalid"></span>
   </ng-template>
 </div>
+
+<h2 class="mt0">Pipes</h2>
+
+<ng-container *ngIf="[{ permission: Permission.Project }] | fsAclHas">
+  Has Project Permission
+</ng-container>

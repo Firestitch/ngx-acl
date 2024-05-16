@@ -20,3 +20,5 @@ export { AclNotWriteDirective } from './app/directives/structured/acl-not-write.
 export { AclReadDirective } from './app/directives/structured/acl-read.directive';
 export { AclWriteDirective } from './app/directives/structured/acl-write.directive';
 
+export * from './app/pipes';
+
