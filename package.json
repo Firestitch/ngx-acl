@@ -41,7 +41,7 @@
     "@angular/router": "^14.3.0",
     "@firestitch/api": "^14.0.0",
     "@firestitch/common": "^14.0.0",
-    "@firestitch/component-tools": "^14.0.3",
+    "@firestitch/component-tools": "^14.0.4",
     "@firestitch/date": "^14.0.0",
     "@firestitch/drawer": "^14.0.0",
     "@firestitch/example": "^14.0.0",
@@ -59,7 +59,9 @@
     "lodash-es": "^4.17.15",
     "rxjs": "^6.5.5",
     "typescript": "4.6.4",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "@firestitch/html": "^14.0.0",
+    "date-fns-tz": "^2.0.0"
   },
   "engines": {
     "node": ">=6.0.0"
