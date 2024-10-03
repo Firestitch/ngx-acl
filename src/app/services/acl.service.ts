@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { AclAccess } from '../enums/acl-access.enum';
@@ -67,7 +68,7 @@ export class FsAcl {
     require = AclRequire.Any,
     aclEntries?: AclEntry[],
   ): boolean {
-    const entries = !!aclEntries
+    const entries = aclEntries
       ? transformEntriers(aclEntries)
       : this.entries;
 
@@ -81,22 +82,24 @@ export class FsAcl {
       return aclObjectPermissions.some((aclObjectPermission) => {
         return this._weightPermissions(entries, aclObjectPermission, aclObjectPermission.access || access);
       });
-    } else {
-      return aclObjectPermissions.every((aclObjectPermission) => {
-        return this._weightPermissions(entries, aclObjectPermission, aclObjectPermission.access || access);
-      });
     }
+ 
+    return aclObjectPermissions.every((aclObjectPermission) => {
+      return this._weightPermissions(entries, aclObjectPermission, aclObjectPermission.access || access);
+    });
+    
   }
 
   public hasPermission(permission: string|string[]): boolean {
     const permissions = typeof permission === 'string' ? Array(permission) : permission;
+
     return Array.from(this.entries)
-    .some((entry) => {
-      return Array.from(entry[1])
-        .some((item) => {
-          return permissions.indexOf(item[0]) !== -1;
-        });
-    });
+      .some((entry) => {
+        return Array.from(entry[1])
+          .some((item) => {
+            return permissions.indexOf(item[0]) !== -1;
+          });
+      });
   }
 
   private _permissionParamAclObjectPermissions(permissionParam: AclPermissionParam, objects?: number[] | number): AclObjectPermission[] {
@@ -125,7 +128,7 @@ export class FsAcl {
   private _weightPermissions(
     aclEntries: AclEntriesList,
     permission: AclObjectPermission,
-    access?: AclAccess
+    access?: AclAccess,
   ): boolean {
     if(permission.object === undefined) {
       const exists = Array.from(aclEntries.values())
@@ -154,6 +157,6 @@ export class FsAcl {
   }
 
   private _hasAccess(permissionAccess: number, access: AclAccess): boolean {
-    return (permissionAccess || 0) >= (access || AclAccess.Read)
+    return (permissionAccess || 0) >= (access || AclAccess.Read);
   }
 }
