@@ -2,7 +2,7 @@
   "name": "@firestitch/acl",
   "title": "ACL",
   "description": "ACL",
-  "version": "15.0.1",
+  "version": "15.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-acl"
@@ -41,10 +41,10 @@
     "@angular/router": "^15.2.10",
     "@firestitch/api": "^14.0.0",
     "@firestitch/common": "^14.0.0",
-    "@firestitch/component-tools": "^15.0.1",
+    "@firestitch/component-tools": "^15.0.3",
     "@firestitch/date": "^14.0.0",
     "@firestitch/drawer": "^14.0.0",
-    "@firestitch/example": "^14.0.0",
+    "@firestitch/example": "^15.0.1",
     "@firestitch/file": "^14.0.0",
     "@firestitch/html": "^14.0.0",
     "@firestitch/iframe": "^14.0.0",
