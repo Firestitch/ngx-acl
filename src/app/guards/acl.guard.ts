@@ -1,10 +1,4 @@
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
-  CanActivateChild
-} from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 
 import { FsAcl } from '../services/acl.service';
@@ -14,7 +8,7 @@ import { AclRequire } from '../enums/acl-require.enum';
 @Injectable({
   providedIn: 'root',
 })
-export class FsAclGuard implements CanActivate, CanActivateChild {
+export class FsAclGuard  {
 
   public constructor(private _aclQueryService: FsAcl, private _router: Router) {}
 

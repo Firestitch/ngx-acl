@@ -2,7 +2,7 @@
   "name": "@firestitch/acl",
   "title": "ACL",
   "description": "ACL",
-  "version": "15.0.2",
+  "version": "16.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-acl"
@@ -26,22 +26,22 @@
     "npm-update": "npx npm-check-updates -u \"/@firestitch/\" --target semver"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^15.2.11",
-    "@angular/animations": "^15.2.10",
-    "@angular/cdk": "^15.2.9",
-    "@angular/cli": "^15.2.11",
-    "@angular/common": "^15.2.10",
-    "@angular/compiler": "^15.2.10",
-    "@angular/compiler-cli": "^15.2.10",
-    "@angular/core": "^15.2.10",
-    "@angular/forms": "^15.2.10",
-    "@angular/material": "^15.2.9",
-    "@angular/platform-browser": "^15.2.10",
-    "@angular/platform-browser-dynamic": "^15.2.10",
-    "@angular/router": "^15.2.10",
+    "@angular-devkit/build-angular": "^16.2.16",
+    "@angular/animations": "^16.2.12",
+    "@angular/cdk": "^16.2.14",
+    "@angular/cli": "^16.2.16",
+    "@angular/common": "^16.2.12",
+    "@angular/compiler": "^16.2.12",
+    "@angular/compiler-cli": "^16.2.12",
+    "@angular/core": "^16.2.12",
+    "@angular/forms": "^16.2.12",
+    "@angular/material": "^16.2.14",
+    "@angular/platform-browser": "^16.2.12",
+    "@angular/platform-browser-dynamic": "^16.2.12",
+    "@angular/router": "^16.2.12",
     "@firestitch/api": "^15.0.1",
     "@firestitch/common": "^15.0.0",
-    "@firestitch/component-tools": "^15.0.5",
+    "@firestitch/component-tools": "^16.0.0",
     "@firestitch/date": "^15.0.1",
     "@firestitch/drawer": "^15.0.0",
     "@firestitch/example": "^15.0.1",
@@ -59,7 +59,7 @@
     "lodash-es": "^4.17.15",
     "rxjs": "^6.5.5",
     "typescript": "4.9.5",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.13.3"
   },
   "engines": {
     "node": ">=6.0.0"
