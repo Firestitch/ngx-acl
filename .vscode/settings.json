@@ -5,6 +5,8 @@
   "[typescript]": {
     "editor.formatOnSave": true
   },
+  "barrelr.lineEnding": "LF",
+  "typescript.preferences.importModuleSpecifier": "shortest",
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit"
