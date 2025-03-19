@@ -18,23 +18,23 @@ import { AclPermissionParam } from '../interfaces/acl-permission-param';
 })
 export class FsAcl {
 
-  private _entries = new BehaviorSubject<AclEntriesList>(new Map());
+  private static _entries = new BehaviorSubject<AclEntriesList>(new Map());
 
   public get entries$(): Observable<AclEntriesList> {
-    return this._entries.asObservable();
+    return FsAcl._entries.asObservable();
   }
 
   public get entries(): AclEntriesList {
-    return this._entries.getValue();
+    return FsAcl._entries.getValue();
   }
 
   public setEntries(aclEntries: AclEntry[]) {
     const entries = transformEntriers(aclEntries);
-    this._entries.next(entries);
+    FsAcl._entries.next(entries);
   }
 
   public clear() {
-    this._entries.next(new Map());
+    FsAcl._entries.next(new Map());
   }
 
   public hasRead(
