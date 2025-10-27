@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 
 import { AclPermissionParam } from '../interfaces';
 import { FsAcl } from '../services';
@@ -9,10 +9,8 @@ import { FsAcl } from '../services';
     standalone: true
 })
 export class FsAclHasPipe implements PipeTransform {
+  protected _aclQuery = inject(FsAcl);
 
-  constructor(
-    protected _aclQuery: FsAcl
-  ) {}
 
   public transform(permissionParam: AclPermissionParam): boolean {
     return this._aclQuery.has(permissionParam);

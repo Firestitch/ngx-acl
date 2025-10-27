@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FsAcl, AclAccess, AclAccesses, AclEntry } from '@firestitch/acl';
 import { Permission } from '../enums/permission';
 import { Permissions } from '../consts/permissions';
@@ -23,6 +23,8 @@ import { MatInput } from '@angular/material/input';
     ],
 })
 export class ConfigurationComponent {
+  private _acl = inject(FsAcl);
+
 
   public Permission = Permission;
   public Accesses = AclAccesses;
@@ -48,7 +50,7 @@ export class ConfigurationComponent {
   ];
 
 
-  constructor(private _acl: FsAcl) {
+  constructor() {
     this.change();
   }
 

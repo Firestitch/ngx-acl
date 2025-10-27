@@ -1,19 +1,22 @@
 import { Component } from '@angular/core';
-import { AclRequire } from '@firestitch/acl';
-import { Permission } from '../enums/permission';
 import { FormsModule } from '@angular/forms';
+
 import { MatFormField, MatHint } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { AclEnableDirective } from '../../../../src/app/directives/attributed/acl-enable.directive';
+
+import { AclRequire } from '@firestitch/acl';
+
 import { AclDisableDirective } from '../../../../src/app/directives/attributed/acl-disable.directive';
+import { AclEnableDirective } from '../../../../src/app/directives/attributed/acl-enable.directive';
+import { Permission } from '../enums/permission';
 
 
 @Component({
-    selector: 'app-attribute',
-    templateUrl: 'attribute.component.html',
-    styleUrls: ['attribute.component.scss'],
-    standalone: true,
-    imports: [FormsModule, MatFormField, MatInput, AclEnableDirective, MatHint, AclDisableDirective]
+  selector: 'app-attribute',
+  templateUrl: './attribute.component.html',
+  styleUrls: ['./attribute.component.scss'],
+  standalone: true,
+  imports: [FormsModule, MatFormField, MatInput, AclEnableDirective, MatHint, AclDisableDirective],
 })
 export class AttributeComponent {
 

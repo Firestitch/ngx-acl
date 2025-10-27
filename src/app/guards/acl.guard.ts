@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { FsAcl } from '../services/acl.service';
 import { AclRequire } from '../enums/acl-require.enum';
@@ -9,8 +9,9 @@ import { AclRequire } from '../enums/acl-require.enum';
   providedIn: 'root',
 })
 export class FsAclGuard  {
+  private _aclQueryService = inject(FsAcl);
+  private _router = inject(Router);
 
-  public constructor(private _aclQueryService: FsAcl, private _router: Router) {}
 
   public canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 

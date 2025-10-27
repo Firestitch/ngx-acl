@@ -6,6 +6,7 @@ import {
   SimpleChanges,
   TemplateRef,
   ViewContainerRef,
+  inject,
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -21,8 +22,6 @@ import { FsAcl } from '../../services/acl.service';
 @Directive()
 export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy {
 
-  protected abstract _checkPermissions(): boolean;
-
   protected _permissionObject: number | number[] = null;
   protected _require: AclRequire = AclRequire.Any;
 
@@ -34,16 +33,18 @@ export abstract class AclStructuredBaseDirective implements OnChanges, OnDestroy
   protected _thenViewRef: EmbeddedViewRef<any>;
   protected _elseViewRef: EmbeddedViewRef<any>;
 
-  protected _destroy$ = new Subject<void>();
+  protected _aclQuery = inject(FsAcl);
+  protected _tempalteRef = inject(TemplateRef);
+  protected _viewContainerRef = inject(ViewContainerRef);
 
-  protected constructor(
-    protected _tempalteRef: TemplateRef<null>,
-    protected _viewContainerRef: ViewContainerRef,
-    protected _aclQuery: FsAcl
-  ) {
-    this._thenTemplateRef = _tempalteRef;
+  private _destroy$ = new Subject<void>();
+
+  protected constructor() {
     this._listenPermissionsChange();
   }
+
+  protected abstract _checkPermissions(): boolean;
+
 
   public set AclPermissionParams(value: AclDirectivePermissions) {
     this._requestedPermissions = prepareRequestedPermissions(value);

@@ -1,13 +1,13 @@
-import { OnChanges, OnDestroy, SimpleChanges, Directive } from '@angular/core';
+import { Directive, OnChanges, OnDestroy, SimpleChanges, inject } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { FsAcl } from '../../services/acl.service';
 import { AclRequire } from '../../enums/acl-require.enum';
-import { AclPermissionParam } from '../../interfaces/acl-permission-param';
-import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
 import { prepareRequestedPermissions } from '../../helpers/prepare-requested-permissions';
+import { AclDirectivePermissions } from '../../interfaces/acl-directive-permissions';
+import { AclPermissionParam } from '../../interfaces/acl-permission-param';
+import { FsAcl } from '../../services/acl.service';
 
 
 @Directive()
@@ -17,18 +17,17 @@ export abstract class AclAttributedBaseDirective implements OnChanges, OnDestroy
   protected _require = AclRequire.Any;
   protected _hasValidAccess = false;
   protected _requestedPermissions: AclPermissionParam = [];
+  protected _aclQuery = inject(FsAcl);
 
-  protected _destroy$ = new Subject<void>();
+  private _destroy$ = new Subject<void>();
 
-  protected constructor(protected _aclQuery: FsAcl) {
+  constructor() {
     this._listenPermissionsChange();
   }
 
   public set AclPermissionParams(value: AclDirectivePermissions) {
     this._requestedPermissions = prepareRequestedPermissions(value);
   }
-
-  protected abstract _checkPermissions(): void;
 
   public ngOnChanges(changes: SimpleChanges): void {
     this._checkPermissions();
@@ -53,7 +52,10 @@ export abstract class AclAttributedBaseDirective implements OnChanges, OnDestroy
     return this._aclQuery.hasWrite(
       this._requestedPermissions,
       this._permissionObject,
-      this._require
+      this._require,
     );
   }
+  
+  protected abstract _checkPermissions(): void;
+
 }
