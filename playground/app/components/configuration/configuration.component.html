@@ -4,44 +4,48 @@
     <th>Access</th>
     <th>Object</th>
   </tr>
-  <tr *ngFor="let entry of entries; let entryIndex = index">
-    <td>
-      <mat-form-field>
-        <mat-select
+  @for (entry of entries; track entry; let entryIndex = $index) {
+    <tr>
+      <td>
+        <mat-form-field>
+          <mat-select
             [(ngModel)]="entry.permission"
             (ngModelChange)="change()"
             [name]="'permission' + entryIndex">
-          <mat-option
-            *ngFor="let item of Permissions"
-            [value]="item.value">
-            {{ item.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field>
-        <mat-select
+            @for (item of Permissions; track item) {
+              <mat-option
+                [value]="item.value">
+                {{ item.name }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <mat-select
             [(ngModel)]="entry.access"
             (ngModelChange)="change()"
             [name]="'access' + entryIndex">
-          <mat-option
-            *ngFor="let item of Accesses"
-            [value]="item.value">
-            {{ item.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field>
-        <input
-          matInput
-          (input)="change()"
-          [(ngModel)]="entry.objectId"
-          name="object_{{entryIndex}}">
-      </mat-form-field>
-    </td>
-  </tr>
+            @for (item of Accesses; track item) {
+              <mat-option
+                [value]="item.value">
+                {{ item.name }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field>
+          <input
+            matInput
+            (input)="change()"
+            [(ngModel)]="entry.objectId"
+            name="object_{{entryIndex}}">
+        </mat-form-field>
+      </td>
+    </tr>
+  }
 </table>
 
