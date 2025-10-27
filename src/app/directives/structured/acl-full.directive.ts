@@ -5,14 +5,15 @@ import { FsAcl } from '../../services/acl.service';
 
 
 @Directive({
-  selector: '[fsAclFull]',
-  inputs: [
-    'AclPermissionParams: fsAclFull',
-    'aclThen: fsAclFullThen',
-    'aclElse: fsAclFullElse',
-    '_permissionObject: fsAclFullObject',
-    '_require: fsAclFullRequire',
-  ],
+    selector: '[fsAclFull]',
+    inputs: [
+        'AclPermissionParams: fsAclFull',
+        'aclThen: fsAclFullThen',
+        'aclElse: fsAclFullElse',
+        '_permissionObject: fsAclFullObject',
+        '_require: fsAclFullRequire',
+    ],
+    standalone: true,
 })
 export class AclFullDirective extends AclStructuredBaseDirective {
 

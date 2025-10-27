@@ -5,14 +5,15 @@ import { FsAcl } from '../../services/acl.service';
 
 
 @Directive({
-  selector: '[fsAclNotRead]',
-  inputs: [
-    'AclPermissionParams: fsAclNotRead',
-    'aclThen: fsAclNotReadThen',
-    'aclElse: fsAclNotReadElse',
-    '_permissionObject: fsAclNotReadObject',
-    '_require: fsAclNotReadRequire',
-  ],
+    selector: '[fsAclNotRead]',
+    inputs: [
+        'AclPermissionParams: fsAclNotRead',
+        'aclThen: fsAclNotReadThen',
+        'aclElse: fsAclNotReadElse',
+        '_permissionObject: fsAclNotReadObject',
+        '_require: fsAclNotReadRequire',
+    ],
+    standalone: true,
 })
 export class AclNotReadDirective extends AclReadDirective {
 

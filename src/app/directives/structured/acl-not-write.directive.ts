@@ -5,14 +5,15 @@ import { FsAcl } from '../../services/acl.service';
 
 
 @Directive({
-  selector: '[fsAclNotWrite]',
-  inputs: [
-    'AclPermissionParams: fsAclNotWrite',
-    'aclThen: fsAclNotWriteThen',
-    'aclElse: fsAclNotWriteElse',
-    '_permissionObject: fsAclNotWriteObject',
-    '_require: fsAclNotWriteRequire',
-  ],
+    selector: '[fsAclNotWrite]',
+    inputs: [
+        'AclPermissionParams: fsAclNotWrite',
+        'aclThen: fsAclNotWriteThen',
+        'aclElse: fsAclNotWriteElse',
+        '_permissionObject: fsAclNotWriteObject',
+        '_require: fsAclNotWriteRequire',
+    ],
+    standalone: true,
 })
 export class AclNotWriteDirective extends AclWriteDirective {
 

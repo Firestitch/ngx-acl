@@ -5,14 +5,15 @@ import { AclStructuredBaseDirective } from './acl-structured-base.directive';
 
 
 @Directive({
-  selector: '[fsAclWrite]',
-  inputs: [
-    'AclPermissionParams: fsAclWrite',
-    'aclThen: fsAclWriteThen',
-    'aclElse: fsAclWriteElse',
-    '_permissionObject: fsAclWriteObject',
-    '_require: fsAclWriteRequire',
-  ],
+    selector: '[fsAclWrite]',
+    inputs: [
+        'AclPermissionParams: fsAclWrite',
+        'aclThen: fsAclWriteThen',
+        'aclElse: fsAclWriteElse',
+        '_permissionObject: fsAclWriteObject',
+        '_require: fsAclWriteRequire',
+    ],
+    standalone: true,
 })
 export class AclWriteDirective extends AclStructuredBaseDirective {
 

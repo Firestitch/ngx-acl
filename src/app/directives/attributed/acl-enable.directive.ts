@@ -10,12 +10,13 @@ import { AclAttributedBaseDirective } from './acl-attributed-base.directive';
 
 
 @Directive({
-  selector: '[fsAclEnable]',
-  inputs: [
-    'AclPermissionParams: fsAclEnable',
-    '_permissionObject: fsAclObject',
-    '_require: fsAclRequire',
-  ],
+    selector: '[fsAclEnable]',
+    inputs: [
+        'AclPermissionParams: fsAclEnable',
+        '_permissionObject: fsAclObject',
+        '_require: fsAclRequire',
+    ],
+    standalone: true,
 })
 export class AclEnableDirective extends AclAttributedBaseDirective implements OnDestroy {
 

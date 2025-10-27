@@ -4,7 +4,10 @@ import { AclPermissionParam } from '../interfaces';
 import { FsAcl } from '../services';
 
 
-@Pipe({ name: 'fsAclRead' })
+@Pipe({
+    name: 'fsAclRead',
+    standalone: true
+})
 export class FsAclReadPipe implements PipeTransform {
 
   constructor(
